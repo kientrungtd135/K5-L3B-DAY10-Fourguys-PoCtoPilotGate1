@@ -32,15 +32,15 @@ Kỹ sư cổng, trưởng nhóm; phụ trách `lab10/guards.py`, Git và các l
 
 ### Đóng góp cụ thể
 
-Chạy baseline và gate; đọc trace `T-002@55`; thêm cổng ghim chính sách hiệu lực, giới hạn hoàn theo tracking, xác minh lỗi hãng theo kiện và lọc trường gửi hãng theo allowlist. Chạy eval sau cổng và kiểm thử hồi quy (13/13 OK). Có dùng AI để hỗ trợ phân tích trace, rà nguồn sự thật và soạn cổng; tự kiểm tra kết quả eval, gate và test trước khi push. Chưa chốt checkpoint vì cấu hình `operations`/`legal` của TV4 còn thiếu.
+Chạy baseline và gate; đọc trace `T-002@55`; thêm cổng ghim chính sách hiệu lực, giới hạn hoàn theo tracking và trần khách, xác minh lỗi hãng theo kiện và trần lỗi/ngày, lọc trường gửi hãng theo allowlist, chặn hoàn khi policy check lỗi và chặn ghi hoàn lặp. Chốt checkpoint vòng 1 (`bfb563a4`), chạy prepared và gate; mọi ngưỡng đã ký đạt. Kiểm thử hồi quy 13/13 OK và thử lỗi LLM 429 xác nhận không fail-open, không ghi hoàn lặp. Có dùng AI để hỗ trợ phân tích trace và soạn cổng; tự kiểm tra kết quả eval, gate và test.
 
 ### Bằng chứng
 
-Commit `19a1d0b`, `23e38d3`; runs `R-base-before-20261119-153634-4d2299`, `R-base-after-20261119-153910-8a1065`, `R-base-after-20261119-154914-bed297`; Phiếu A A2/A5 và Phiếu B B0/B1/B6 kỹ thuật/B7.1.
+Commit `19a1d0b`, `23e38d3`; checkpoint `bfb563a4`; runs `R-base-before-20261119-153634-4d2299`, `R-base-after-20261119-153910-8a1065`, `R-base-after-20261119-161308-fe1b1b`, `R-base-prepared-20261119-161437-fe1b1b`; Phiếu A A2/A5 và Phiếu B B0/B1/B5/B6 kỹ thuật/B7.1.
 
 ### Exit ticket
 
-Điều học được: phải kiểm tra số ngày khách khai với tracking và tính lại quyền lợi từ chính sách hiệu lực trước khi ghi tiền hoặc quy lỗi hãng. Còn chưa chắc: cách xử lý khi tracking production bị thiếu hoặc cập nhật trễ mà không chuyển nhầm ca hợp lệ sang người duyệt.
+Điều học được: phải kiểm tra số ngày khách khai với tracking và tính lại quyền lợi từ chính sách hiệu lực trước khi ghi tiền hoặc quy lỗi hãng; lỗi LLM cũng phải đóng an toàn trước lệnh ghi. Còn chưa chắc: cách xử lý khi tracking production bị thiếu/cập nhật trễ và dữ liệu sổ cái thiếu ngày mà không chuyển nhầm ca hợp lệ sang người duyệt.
 
 ## DuongMinhChien-2A202603921
 

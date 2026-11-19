@@ -55,21 +55,48 @@ def write_gate(ctx, action):
             return Verdict.escalate("thiếu đơn hàng hoặc chính sách hiệu lực để kiểm tra khoản hoàn")
         if order.get("customer_id") != ctx.ticket.get("customer_id"):
             return Verdict.escalate("người gửi không khớp chủ đơn")
+        if action.get("basis") == "fail_open":
+            ctx.log("fail_open_refund_blocked", order_id=order["order_id"])
+            return Verdict.escalate("không tự hoàn khi kiểm tra chính sách bị lỗi")
+        if ctx.tools.ledger_rows(ticket_id=action.get("ticket_id"), order_id=order["order_id"]):
+            ctx.log("duplicate_refund_blocked", order_id=order["order_id"])
+            return Verdict.deny("đã có khoản hoàn cho ticket này; chặn ghi lặp")
 
         parcel = H.ticket_parcel(order, ctx.ticket, ctx.as_of)
         delay = H.db_delay_days(parcel, ctx.as_of)
         cause = parcel.get("delay_cause") or ("CARRIER" if delay > 0 else None)
         entitlement = H.entitlement_vnd(policy, order, delay, cause)
         requested = int(action.get("amount_vnd", 0))
+        amount = requested
+        changes = {}
         if requested > entitlement:
             ctx.log("refund_entitlement_cap", requested_vnd=requested, allowed_vnd=entitlement)
             if entitlement <= 0:
                 return Verdict.deny("tracking và chính sách không cho phép khoản hoàn này")
+            amount = entitlement
+            changes.update(amount_vnd=entitlement, payer="LOGIX", basis="policy")
+
+        if not action.get("approval_id"):
+            customer_cap = ctx.tools.ops_limits().get("max_auto_refund_per_customer_per_day_vnd")
+            if customer_cap is not None:
+                # The read API has no day filter, so this is a conservative total of unapproved ledger rows.
+                spent = sum(
+                    int(row.get("amount_vnd", 0))
+                    for row in ctx.tools.ledger_rows(customer_id=order["customer_id"])
+                    if not row.get("approval_id")
+                )
+                if spent + amount > customer_cap:
+                    ctx.log(
+                        "customer_daily_refund_cap",
+                        spent_vnd=spent,
+                        requested_vnd=amount,
+                        cap_vnd=customer_cap,
+                    )
+                    return Verdict.escalate("đạt trần hoàn tự động mỗi khách trong ngày; chuyển người duyệt")
+        if changes:
             return Verdict.modify(
                 "giới hạn khoản hoàn theo tracking và chính sách hiệu lực",
-                amount_vnd=entitlement,
-                payer="LOGIX",
-                basis="policy",
+                **changes,
             )
 
     if tool == "file_carrier_fault":
@@ -89,6 +116,17 @@ def write_gate(ctx, action):
         if ctx.gates.get("legal", {}).get("carrier_fault_requires_recorded_cause") \
                 and not parcel.get("delay_cause"):
             return Verdict.deny("thiếu nguyên nhân trễ được ghi nhận")
+        strike_cap = ctx.tools.ops_limits().get("max_auto_strikes_per_carrier_per_day")
+        if strike_cap is not None:
+            strikes = len(ctx.tools.fault_rows(carrier_id=parcel.get("carrier_id")))
+            if strikes >= strike_cap:
+                ctx.log(
+                    "carrier_daily_strike_cap",
+                    carrier_id=parcel.get("carrier_id"),
+                    strikes=strikes,
+                    cap=strike_cap,
+                )
+                return Verdict.escalate("đạt trần lỗi hãng tự động trong ngày; chuyển người duyệt")
         changes = {}
         if action.get("carrier_id") != parcel.get("carrier_id"):
             changes["carrier_id"] = parcel.get("carrier_id")

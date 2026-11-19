@@ -398,22 +398,24 @@ bao nhiêu thời gian? (3) Có phần nào của dự án không nên làm ti�
 
 | | **v1** (phút 105–115, TRƯỚC khi nhận thẻ sự cố) |
 |---|---|
-| Commit ký tiêu chí (message `Sign acceptance criteria`; hash commit, tuỳ chọn) | |
-| Hash chốt cổng vòng 1 (8 ký tự lệnh `lab10.checkpoint` in ra, tuỳ chọn) | |
-| Mã lần chạy dùng làm bằng chứng | bộ nền, mốc base: ________ · bộ nền với cổng vòng 1 (prepared): ________ |
-| Còn dòng "vượt trần" nào trong report? (hàng chờ, chi phí, ROI, trần tiền, pháp lý) | |
-| Kho hoặc hãng có số xấu nhất: ____. Nếu chỉ nhìn phân khúc này, quyết định có đổi không? *(Đọc khối "theo kho và hãng" ở cuối output `lab10.eval` / `lab10.grade`, hoặc mục `by_segment` trong `report.json`.)* | |
-| Quyết định (khoanh một) | Tiếp tục · Thu hẹp · Cải tiến thêm · Dừng |
-| Bằng chứng 1: mã lần chạy + chỉ số bắt buộc nào đạt / chưa | |
-| Bằng chứng 2 | |
-| Bằng chứng 3 | |
-| Khớp dòng nào trong `decision_rule` đã ký? | |
-| Nếu Thu hẹp: cắt phần nào, vì sao | |
-| Nếu Cải tiến thêm: giả thuyết cụ thể + hạn | |
-| Nếu Dừng: bài học ghi lại | |
-| Một bằng chứng còn thiếu (thứ bộ nền chưa đo được) | |
-| Ngày quyết định lại (trừ khi Dừng) | |
-| PIC ký | |
+| Commit ký tiêu chí (message `Sign acceptance criteria`) | `19a1d0b` |
+| Hash chốt cổng vòng 1 | `bfb563a4` |
+| Mã lần chạy dùng làm bằng chứng | Bộ nền `base`: `R-base-before-20261119-153634-4d2299` · bộ nền `prepared`: `R-base-prepared-20261119-161437-fe1b1b`. |
+| Còn dòng "vượt trần" nào trong report? | B0 dòng 6 ghi `gate` đạt mọi ngưỡng đã ký và không có dòng vượt trần ở `prepared`. |
+| Kho hoặc hãng có số xấu nhất. Nếu chỉ nhìn phân khúc này, quyết định có đổi không? | HCM xấu nhất trên nền theo B1: hoàn sai 20.000 đồng và ghi oan hãng VNX 1 lần. Nếu chỉ nhìn HCM ở `base` thì cần Cải tiến thêm. HCM nằm trong phạm vi `prepared`, cả bộ trong phạm vi còn 0 hoàn sai, 0 lỗi oan và 0 lộ PII, nên giữ HCM trong phạm vi v1. |
+| Quyết định | **Tiếp tục** với phạm vi HN và HCM đã đo. Nhóm xử lý thủ công 9/22 ticket ngoài phạm vi. |
+| Bằng chứng 1: chất lượng | `R-base-prepared-20261119-161437-fe1b1b`: `pass_rate` 100% ≥ 94%, `pass^k` 100% ≥ 85%. |
+| Bằng chứng 2: an toàn | Từ `R-base-before-20261119-153634-4d2299` đến `R-base-prepared-20261119-161437-fe1b1b`: hoàn sai 20.000 → 0 đồng, lỗi hãng oan 1 → 0, lộ PII 0 → 0. Cả ba đạt ngưỡng 0 ở `prepared`. |
+| Bằng chứng 3: phạm vi và năng lực duyệt | `R-base-prepared-20261119-161437-fe1b1b`: phủ 13/22 ticket (59,09%), tỷ lệ chuyển người 23,08% dưới mục tiêu 25%. `gate` xác nhận các ngưỡng chi phí, ROI và hàng chờ đều đạt. |
+| Khớp dòng nào trong `decision_rule` đã ký? | **Tiếp tục**. Ở mốc đánh giá v1, bộ nền với cổng đã chốt đạt các ngưỡng bắt buộc và kinh doanh/vận hành, không vượt trần và có độ phủ dương. |
+| Nếu Thu hẹp: cắt phần nào, vì sao | Không áp dụng. |
+| Nếu Cải tiến thêm: giả thuyết cụ thể + hạn | Không áp dụng. |
+| Nếu Dừng: bài học ghi lại | Không áp dụng. |
+| Một bằng chứng còn thiếu (thứ bộ nền chưa đo được) | Bộ nền chưa đủ để xác nhận an toàn của thông báo hãng trên các tình huống chia sẻ dữ liệu ngoài luồng thông thường. B1 cho thấy monitor trường dư từng báo 0,5091 dù nhãn lộ PII bằng 0. |
+| Ngày quyết định lại (trừ khi Dừng) | Rà lại tại Gate 1 v2 sau khi đo thẻ. Mốc xem lại tiêu chí: 30/11/2026 theo A4. |
+| PIC ký | Trịnh Hưng Thịnh (TV3). |
+
+*B8 được bổ sung vào repo sau commit nhận thẻ. Quyết định v1 ở đây chỉ dựa trên kết quả bộ nền đã ghi trước khi nhận thẻ.*
 
 Xong v1 thì lưu và đẩy một bản (sau mốc này không sửa cột v1):
 

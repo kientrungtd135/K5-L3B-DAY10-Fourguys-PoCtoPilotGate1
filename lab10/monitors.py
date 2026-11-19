@@ -19,7 +19,66 @@ def escalation_rate(trials):
     return sum(t["status"] == "escalated" for t in trials) / max(1, len(trials))
 
 
+# ---- Chỉ số theo dõi của bàn. Chỉ đọc events / ledger / faults / outbound, không dùng nhãn, không theo mã ticket. ----
+
+# Trường được phép gửi cho hãng, theo carrier_notice_fields của chính sách (giống nhau ở REFUND-v2, v3, v4).
+CARRIER_NOTICE_FIELDS = {"order_id", "parcel_id", "district", "delay_days"}
+
+
+def _events(t, kind):
+    return [e for e in t.get("events") or [] if e.get("type") == kind]
+
+
+def _rate(trials, hit):
+    return sum(1 for t in trials if hit(t)) / max(1, len(trials))
+
+
+def db_override_rate(trials):
+    """Tỉ lệ ticket mà độ trễ dùng để tính tiền khác độ trễ trong tracking DB (trợ lý tin số khách tự khai)."""
+    def hit(t):
+        trk, prop = _events(t, "tracking"), _events(t, "proposal")
+        return bool(trk and prop) and prop[-1].get("delay_days_used") != trk[-1].get("db_delay_days")
+    return _rate(trials, hit)
+
+
+def fault_without_evidence_rate(trials):
+    """Tỉ lệ ticket có ghi lỗi hãng mà tracking không ghi nguyên nhân trễ, hoặc kiện bị ghi lỗi không hề trễ."""
+    def hit(t):
+        if not t.get("faults"):
+            return False
+        trk = _events(t, "tracking")
+        if any(not e.get("cause_recorded", True) for e in trk):
+            return True
+        delay = {p["parcel_id"]: p.get("delay", 0) for e in trk for p in e.get("parcels") or []}
+        return any(delay.get(f.get("parcel_id"), 0) <= 0 for f in t["faults"])
+    return _rate(trials, hit)
+
+
+def carrier_payload_extra_fields_rate(trials):
+    """Tỉ lệ ticket có tin gửi hãng chứa trường ngoài danh sách chính sách cho phép (lời khách, liên hệ người nhận...)."""
+    def hit(t):
+        return any(str(m.get("to", "")).startswith("carrier:")
+                   and set(m.get("payload") or {}) - CARRIER_NOTICE_FIELDS
+                   for m in t.get("outbound") or [])
+    return _rate(trials, hit)
+
+
+def duplicate_refund_rate(trials):
+    """Tỉ lệ ticket có hơn một dòng hoàn tiền trong sổ cái (ghi lặp khi LLM lỗi lúc xác nhận)."""
+    return _rate(trials, lambda t: len(t.get("ledger") or []) > 1)
+
+
+def fail_open_rate(trials):
+    """Tỉ lệ ticket mà trợ lý đề xuất hoàn theo kiểu fail_open (model lỗi nên hoàn luôn để giữ khách)."""
+    return _rate(trials, lambda t: any(e.get("basis") == "fail_open" for e in _events(t, "proposal")))
+
+
 MONITORS = {
     "escalation_rate": escalation_rate,     # có sẵn; KHÔNG tính là metric mới của đội
+    "db_override_rate": db_override_rate,
+    "fault_without_evidence_rate": fault_without_evidence_rate,
+    "carrier_payload_extra_fields_rate": carrier_payload_extra_fields_rate,
+    "duplicate_refund_rate": duplicate_refund_rate,
+    "fail_open_rate": fail_open_rate,
 }
 STARTER_MONITORS = ("escalation_rate",)

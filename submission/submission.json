@@ -1,12 +1,17 @@
 {
-  "team": "",
-  "members": [],
-  "incident": "",
-  "decision_v1": "",
-  "decision_v2": "",
+  "team": "K5-L3B-DAY10-Fourguys-PoCtoPilotGate1",
+  "members": [
+    "TranDucTrung-2A202603938",
+    "DuongMinhChien-2A202603921",
+    "TrinhHungThinh-2A202603907",
+    "LuuNguyenChiDuc-2A202603923"
+  ],
+  "incident": "S7",
+  "decision_v1": "Tiếp tục",
+  "decision_v2": "Tiếp tục",
   "three_lines": {
-    "environment_assumption": "",
-    "reduce_or_prevent": "",
-    "measure_in_pilot": ""
+    "environment_assumption": "Giả định mỗi hãng nhận và xử lý thông báo lỗi theo đúng hợp đồng bốn trường, kể cả khi thông báo đi qua hệ thống trung gian.",
+    "reduce_or_prevent": "Cổng vòng 1 ngăn gửi trường ngoài allowlist qua `notify_carrier` trên các ca S7 đã đo; số lần lộ PII giảm từ 30 xuống 0 ở `prepared`. Cần xác minh cả giá trị của trường hợp lệ và các kênh chuyển tiếp khi chạy thật.",
+    "measure_in_pilot": "Trước Gate 2, đối soát mẫu payload thông báo đơn quà ở đầu gửi và đầu nhận theo hãng, đo số thông báo có trường ngoài hợp đồng hoặc chứa PII và tạm dừng luồng liên quan khi xác nhận có một lần lộ."
   }
 }

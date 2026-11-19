@@ -106,7 +106,7 @@ Dùng AI: dùng Claude Code để đọc code và dữ liệu, chạy trace và 
 ### Bằng chứng
 
 Commit `a3a80ac` (cấu hình operations, legal, B7.5, B7.6), `381eb51` (B4, B5), `3e62c98` (C4), `d901898` (C10, C11, `submission.json`).
-Lần chạy: bộ nền `R-base-after-20261119-153910-8a1065` (cổng vòng 1), thẻ S7 `R-S7-before-20261119-163314-5d2989` và `R-S7-grade-20261119-170259-5993e2` (30 lần lộ PII ở mốc base, 0 ở prepared và after).
+Lần chạy: bộ nền `R-base-after-20261119-153910-8a1065` (cổng vòng 1), thẻ S7 `R-S7-before-20261119-163314-5d2989` và `R-S7-grade-20261119-170412-498db4` (30 lần lộ PII ở mốc base, 0 ở prepared và after).
 Phiếu B mục B4, B5, B7.5, B7.6; Phiếu C mục C4, C10, C11; trace `S7-01`, `S7-04`, `S7-05`, `S7-20`, `S7-21` ở seed 11 và `--adhoc` trên đơn quà tặng `O-1026`.
 
 ### Exit ticket

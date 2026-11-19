@@ -414,7 +414,7 @@ Ghi các dòng đổi sau sự cố. Mỗi dòng vẫn phải có một PIC có 
 
 | # nhóm | Trạng thái mới (Xong / Chưa / Không áp dụng) | Bằng chứng mới (mã lần chạy, mục phiếu, số trong report) | PIC |
 |---|---|---|---|
-| 3 · Bảo mật | **Chưa** (trước là Xong; hạ xuống vì thẻ S7 cho thấy chỉ chặn được tên trường) | Báo S7: PII 30 → 0 → 0 (`R-S7-grade-20261119-170259-5993e2`), nhưng cổng chưa kiểm **giá trị** trong trường được phép và chưa kiểm hệ thống trung gian của hãng (C4 dòng 3, C12 dòng 3); có thêm `customer_text_contact_rate`, `carrier_payload_contact_rate` (C8) | Trần Đức Trung |
+| 3 · Bảo mật | **Chưa** (trước là Xong; hạ xuống vì thẻ S7 cho thấy chỉ chặn được tên trường) | Báo S7: PII 30 → 0 → 0 (`R-S7-grade-20261119-170412-498db4`), nhưng cổng chưa kiểm **giá trị** trong trường được phép và chưa kiểm hệ thống trung gian của hãng (C4 dòng 3, C12 dòng 3); có thêm `customer_text_contact_rate`, `carrier_payload_contact_rate` (C8) | Trần Đức Trung |
 | 7 · Vận hành | Xong | Runbook 2 có thêm hai tín hiệu (`customer_text_contact_rate` > 10%/ngày, `carrier_payload_contact_rate` > 0 thì tắt `notify_carrier`); runbook phần 4–5 dưới đây | Lưu Nguyễn Chí Đức |
 | 8 · Con người, pháp lý | **Xong** cho lỗi của thẻ (tin gửi hãng); **Chưa** cho trần 2 lỗi hãng mỗi ngày (chưa ai thực thi, xem B4 và B5 dòng 4) | S7 `after`: 0 lần lộ PII cho bên thứ ba, 0 lỗi oan; `legal` chặn `recipient_contact`, `customer_note` | Lưu Nguyễn Chí Đức |
 | 6 · Chi phí | Xong, ghi chú thêm | S7 `after`: 6.434đ/ticket ≤ 9.000đ, ROI 0,55 ≥ 0,10 (bộ nền 5.550đ, ROI 0,80); rủi ro ROI mỏng đã vào Risk register (C10) | Trịnh Hưng Thịnh |

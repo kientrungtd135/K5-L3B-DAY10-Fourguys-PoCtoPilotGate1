@@ -86,12 +86,22 @@ Vận hành và pháp lý; phụ trách các mục `operations` và `legal` tron
 
 ### Đóng góp cụ thể
 
-Điền sau khi hoàn thành.
+Vòng 1: đặt mục `operations` và `legal` trong `config/operating_gates.json` (người chịu trách nhiệm `NV-TUNG`, người duyệt `NV-HANH`, 1 người trực, 6 ca mỗi giờ, chờ tối đa 60 phút, 5 điều kiện dừng, kiểm mẫu 10%, ghi chú giải thích bật; chặn `recipient_contact` và `customer_note` khi gửi hãng, chỉ ghi lỗi hãng khi tracking có nguyên nhân).
+Viết runbook phần 1–3 và mục Giờ cao điểm (B7.5, B7.6) khớp các con số đó.
+Viết HAZOP vòng 1 trên `notify_carrier` (B4, 5 dòng kỹ thuật và 2 dòng ngoài kỹ thuật) và checklist 9 nhóm việc có PIC (B5).
+Phát hiện và báo cho Kỹ sư cổng hai chỗ chưa có cổng: trần 2 lỗi hãng mỗi ngày và các đường ghi hoàn khi LLM lỗi.
+
+Vòng 2 (thẻ S7): viết HAZOP của thẻ (C4, 4 dòng, trong đó 2 nhánh chưa thấy trên trace), Risk register (C10, 3 dòng), cập nhật checklist và runbook phần 4–5 (C11), và điền `submission/submission.json`.
+
+Dùng AI: dùng Claude Code để đọc code và dữ liệu, chạy trace và đánh giá, và soạn nháp các mục trên; số liệu và con số cấu hình được kiểm lại bằng lần chạy thực tế trước khi ghi vào phiếu.
 
 ### Bằng chứng
 
-Điền mã commit, mã lần chạy (`runs/<mã>`) và mục phiếu sau khi hoàn thành.
+Commit `a3a80ac` (cấu hình operations, legal, B7.5, B7.6), `381eb51` (B4, B5), `3e62c98` (C4), `d901898` (C10, C11, `submission.json`).
+Lần chạy: bộ nền `R-base-after-20261119-153910-8a1065` (cổng vòng 1), thẻ S7 `R-S7-before-20261119-163314-5d2989` và `R-S7-grade-20261119-170259-5993e2` (30 lần lộ PII ở mốc base, 0 ở prepared và after).
+Phiếu B mục B4, B5, B7.5, B7.6; Phiếu C mục C4, C10, C11; trace `S7-01`, `S7-04`, `S7-05`, `S7-20`, `S7-21` ở seed 11 và `--adhoc` trên đơn quà tặng `O-1026`.
 
 ### Exit ticket
 
-Điền sau buổi lab.
+Điều học được: cổng lọc dữ liệu gửi hãng hoạt động theo **tên trường**, nên ghi `"phone"` hay `"name"` vào danh sách chặn thì không chặn được gì; phải chặn đúng khoá `recipient_contact` và `customer_note`. Và một cổng đang chạy tốt có thể khiến mọi chỉ số đầu ra bằng 0, nên cần thêm chỉ số cho thấy cổng có đang phải làm việc hay không.
+Còn chưa chắc: các hệ thống trung gian của hãng có tuân theo hợp đồng bốn trường hay không, và liệu 1 người duyệt cùng kiểm mẫu 10% còn đủ khi chính sách `REFUND-v4` hạ hạn mức tự động xuống 100.000đ từ ngày 01/12/2026.

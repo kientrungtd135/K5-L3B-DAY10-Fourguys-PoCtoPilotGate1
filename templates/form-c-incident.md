@@ -36,6 +36,9 @@ Mỗi lệnh `lab10.eval` và `lab10.grade` tự ghi một dòng vào `runs/jour
 | 4 | `R-base-after-20261119-165032-fe1b1b` | base · after | Kiểm regression trên bộ nền; cùng cấu hình trước C8 | 1.0 [1.0, 1.0] | 1.0 | 0 · 0 · 0 | 0.2308 | Không có ca mới hỏng; mọi ngưỡng đã ký đạt, 9 ticket ngoài phạm vi tiếp tục làm tay. |
 | 5 | `R-S7-after-20261119-170009-498db4` | S7 · after | Thêm monitor `customer_text_contact_rate` và `carrier_payload_contact_rate` (không đổi guard, config) | 1.0 [1.0, 1.0] | 1.0 | 0 · 0 · 0 | 0.0 | Kết quả giữ nguyên; `customer_text_contact_rate` 0,5 trên S7 so với 0 trên bộ nền, nên vẫn sáng đèn sau khi cổng đã chặn. |
 | 6 | `R-base-after-20261119-170010-498db4` | base · after | Kiểm lại bộ nền sau khi thêm monitor | 1.0 [1.0, 1.0] | 1.0 | 0 · 0 · 0 | 0.2308 | Không có ca mới hỏng; grade `R-S7-grade-20261119-170010-498db4` cho PASS-VISIBLE, cả 5 dòng kiểm tra đều ✅. |
+| 7 | `R-S7-after-20261119-170348-498db4` | S7 · after | TV1 xác nhận sau C8/C9; không đổi guard/config | 1.0 [1.0, 1.0] | 1.0 | 0 · 0 · 0 | 0.0 | 30/30 đạt; `customer_text_contact_rate` 0.5, `carrier_payload_contact_rate` 0; ROI 0.55, không ùn. |
+| 8 | `R-base-after-20261119-170405-498db4` | base · after | TV1 kiểm regression sau C8/C9; không đổi guard/config | 1.0 [1.0, 1.0] | 1.0 | 0 · 0 · 0 | 0.2308 | Không có ca mới hỏng; hai monitor liên hệ đều 0; 9 ticket ngoài phạm vi tiếp tục làm tay. |
+| 9 | `R-S7-grade-20261119-170412-498db4` | S7 · grade | Grade sau khi chạy S7 after và base after hậu C8/C9 | — | — | — | — | PASS-VISIBLE: integrity, criteria, visible, regression, monitor đều đạt; không có hidden tests trên máy. |
 
 ---
 

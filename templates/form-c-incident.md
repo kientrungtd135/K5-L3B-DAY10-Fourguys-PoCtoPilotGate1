@@ -327,8 +327,7 @@ python3 -m lab10.grade --incident Sx
 | Nhánh fault tree | Nguyên nhân | Chỗ sửa (hàm + nhánh trong `guards.py`, hoặc khoá trong `operating_gates.json`) | Tầng (phát hiện / chặn / giới hạn thiệt hại / vận hành) | GIẢM khả năng hay NGĂN hẳn? Vì sao | Mã lần chạy sau khi sửa |
 |---|---|---|---|---|---|
 | C6 [1] + [2]: PII qua `notify_carrier` | `S7-20@11`: ticket không có liên hệ nhưng payload chứa `recipient_contact` tên/số điện thoại từ đơn; `S7-01@11` còn đưa `customer_note` có số điện thoại/địa chỉ ra hãng. | Giữ `write_gate` ở `notify_carrier`: chỉ cho trường trong `carrier_notice_fields`, loại trường bị chặn theo `legal`. | Chặn trước khi gửi | **Ngăn** gửi các trường ngoài allowlist qua nhánh này: `S7-20@11` ghi nhận cả `customer_note` và `recipient_contact` bị loại; PII leaks 30 → 0. Chưa bảo đảm giá trị bên trong trường được phép không bị nhiễm PII hoặc không có đường gửi khác. | `R-S7-after-20261119-165032-fe1b1b` |
-| [2] | | | | | |
-| [3] | | | | | |
+| C6 [3]: thiếu người giám sát tin gửi hãng | Mốc base không có danh sách trường PII bị chặn và không lấy mẫu quyết định; một trường mới hoặc PII đặt trong giá trị được phép vẫn có thể lọt. | `config/operating_gates.json`: chặn `recipient_contact`/`customer_note`, lấy mẫu quyết định 10%; monitor `carrier_payload_extra_fields_rate` phát hiện trường thừa. | Phát hiện / vận hành | **Giảm**, không ngăn hẳn: danh sách chặn và monitor không phát hiện PII nhúng trong giá trị hợp lệ; lấy mẫu quyết định không đồng nghĩa duyệt payload hãng. Cần hoàn tất C8 để chốt giám sát riêng. | `R-S7-after-20261119-165032-fe1b1b` |
 
 ---
 

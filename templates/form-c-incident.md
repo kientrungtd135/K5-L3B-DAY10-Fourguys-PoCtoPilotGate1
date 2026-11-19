@@ -30,9 +30,9 @@ Mỗi lệnh `lab10.eval` và `lab10.grade` tự ghi một dòng vào `runs/jour
 
 | # | Mã lần chạy | Bộ ticket · mốc | Đổi MỘT thứ gì so với lần trước | pass_rate (khoảng tin cậy 95%) | pass_k | Hoàn sai (đ) · lỗi hãng oan · lộ dữ liệu | Tỉ lệ chuyển người | Kết luận (một câu) |
 |---|---|---|---|---|---|---|---|---|
-| 1 | | Sx · prepared | nhận thẻ đã bốc, chưa sửa thêm (đúng cổng vòng 1 đã chốt) | | | | | |
-| 2 | | Sx · after | | | | | | |
-| 3 | | Sx · after | | | | | | |
+| 1 | `R-S7-prepared-20261119-163314-5d2989` | S7 · prepared | Nhận thẻ S7, chưa sửa thêm; checkpoint `bfb563a4` | 1.0 [1.0, 1.0] | 1.0 | 0 · 0 · 0 | 0.0 | Cổng vòng 1 đưa pass_rate từ 0.25 lên 1.0 và PII leaks từ 30 xuống 0; không vượt trần. |
+| 2 | `R-S7-after-20261119-163314-5d2989` | S7 · after | Chạy grade trước khi sửa; không đổi code so với prepared | 1.0 [1.0, 1.0] | 1.0 | 0 · 0 · 0 | 0.0 | Giống prepared; review rate gồm kiểm mẫu là 0.1667, chờ lâu nhất 0 phút, ROI 0.55. |
+| 3 | | S7 · after | | | | | | |
 | 4 | | base · after | (kiểm không regression) | | | | | |
 
 ---
@@ -47,14 +47,14 @@ Chạy **trước khi sửa bất cứ thứ gì**:
 python3 -m lab10.grade --incident Sx
 ```
 
-- Mã lần chạy grade: `__________` · base: `__________` · prepared: `__________`
-- Cổng vòng 1 đỡ được ô / con số nào (so cột base với cột prepared): …
-- Khối kinh doanh và vận hành còn dòng nào vượt trần: …
+- Mã lần chạy grade: `R-S7-grade-20261119-163314-5d2989` · base: `R-S7-before-20261119-163314-5d2989` · prepared: `R-S7-prepared-20261119-163314-5d2989`
+- Cổng vòng 1 đỡ được ô / con số nào (so cột base với cột prepared): pass_rate 0.25 [0.0, 0.625] → 1.0 [1.0, 1.0], pass_k 0.25 → 1.0; PII leaks 30 → 0. Hoàn sai và lỗi hãng oan đều 0 ở cả hai mốc.
+- Khối kinh doanh và vận hành còn dòng nào vượt trần: Không. Ở prepared, chi phí 6.434đ/ticket ≤ 9.000đ, ROI 0.55 ≥ 0.10, chờ lâu nhất 0 phút ≤ 60, 0 ca ùn, tổng hoàn tự động 25.000đ < 1.800.000đ/ngày, ticket LLM đắt nhất 782đ < 1.500đ.
 
 **Mở lại pre-mortem (Phiếu B mục B6), viết bằng bút khác màu.** Với thẻ S1, S3, S4, S5 đây là một phần của phần riêng theo thẻ.
 
-- Sự cố trên thẻ thuộc lăng kính nào (kỹ thuật, kinh doanh, con người và vận hành, pháp lý)? …
-- Có nằm trong các lý do bàn đã viết không? Nếu có: cổng vòng 1 đã đỡ được bao nhiêu (đọc cột prepared trong report)? Nếu không: vì sao cả bàn không nghĩ tới? …
+- Sự cố trên thẻ thuộc lăng kính nào (kỹ thuật, kinh doanh, con người và vận hành, pháp lý)? Pháp lý là chính, đồng thời ảnh hưởng lòng tin của người đặt hàng và người nhận quà vì thông tin người nhận được gửi cho hãng mà họ không biết.
+- Có nằm trong các lý do bàn đã viết không? Nếu có: cổng vòng 1 đã đỡ được bao nhiêu (đọc cột prepared trong report)? Nếu không: vì sao cả bàn không nghĩ tới? Có. B6 lăng kính pháp lý đã nêu `recipient_contact`/`customer_note` bị gửi cho bên thứ ba; ở S7, PII leaks giảm từ 30 xuống 0 và `carrier_payload_extra_fields_rate` từ 0.875 xuống 0.
 - Lý do còn thiếu, thêm bây giờ:
 
 | Lý do thất bại (viết ở thì quá khứ) | Lăng kính | Kiểm được bằng gì (trace / data / config nào) |

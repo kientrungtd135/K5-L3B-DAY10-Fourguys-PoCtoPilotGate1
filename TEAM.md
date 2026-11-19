@@ -32,11 +32,11 @@ Kỹ sư cổng, trưởng nhóm; phụ trách `lab10/guards.py`, Git và các l
 
 ### Đóng góp cụ thể
 
-Chạy baseline và gate; đọc trace `T-002@55`; thêm cổng ghim chính sách hiệu lực, giới hạn hoàn theo tracking và trần khách, xác minh lỗi hãng theo kiện và trần lỗi/ngày, lọc trường gửi hãng theo allowlist, chặn hoàn khi policy check lỗi và chặn ghi hoàn lặp. Chốt checkpoint vòng 1 (`bfb563a4`), chạy prepared và gate; mọi ngưỡng đã ký đạt. Kiểm thử hồi quy 13/13 OK và thử lỗi LLM 429 xác nhận không fail-open, không ghi hoàn lặp. Có dùng AI để hỗ trợ phân tích trace và soạn cổng; tự kiểm tra kết quả eval, gate và test.
+Chạy baseline và gate; đọc trace `T-002@55`; thêm cổng ghim chính sách hiệu lực, giới hạn hoàn theo tracking và trần khách, xác minh lỗi hãng theo kiện và trần lỗi/ngày, lọc trường gửi hãng theo allowlist, chặn hoàn khi policy check lỗi và chặn ghi hoàn lặp. Chốt checkpoint vòng 1 (`bfb563a4`), chạy prepared và gate; mọi ngưỡng đã ký đạt. Với S7, chạy grade trước khi sửa và điền C0/C1; PII leaks giảm từ 30 xuống 0, các kiểm integrity/criteria/visible/regression/monitor đều đạt (chưa có test ẩn). Kiểm thử hồi quy 13/13 OK và thử lỗi LLM 429 xác nhận không fail-open, không ghi hoàn lặp. Có dùng AI để hỗ trợ phân tích trace và soạn cổng; tự kiểm tra kết quả eval, gate và test.
 
 ### Bằng chứng
 
-Commit `19a1d0b`, `23e38d3`; checkpoint `bfb563a4`; runs `R-base-before-20261119-153634-4d2299`, `R-base-after-20261119-153910-8a1065`, `R-base-after-20261119-161308-fe1b1b`, `R-base-prepared-20261119-161437-fe1b1b`; Phiếu A A2/A5 và Phiếu B B0/B1/B5/B6 kỹ thuật/B7.1.
+Commit `19a1d0b`, `23e38d3`, `0217571`; checkpoint `bfb563a4`; runs `R-base-before-20261119-153634-4d2299`, `R-base-after-20261119-153910-8a1065`, `R-base-after-20261119-161308-fe1b1b`, `R-base-prepared-20261119-161437-fe1b1b`, `R-S7-grade-20261119-163314-5d2989`; Phiếu A A2/A5, Phiếu B B0/B1/B5/B6 kỹ thuật/B7.1/B8 và Phiếu C C0/C1.
 
 ### Exit ticket
 

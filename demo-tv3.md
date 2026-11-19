@@ -10,7 +10,7 @@ Phần TV3 chiếm khoảng 90 giây cuối trong demo 5 phút. Sau khi TV1 chi�
 >
 > V2 giữ **Tiếp tục** vì các ngưỡng đã ký đều đạt và báo cáo không còn vượt trần. Hai kho HN/HCM bao phủ 6 trên 8 ticket S7 với một người duyệt trực. Hai ticket còn lại chuyển xử lý thủ công. Trước Gate 2, nhóm sẽ đối soát payload ở cả đầu gửi và đầu nhận, vì hệ thống trung gian của hãng có thể xử lý các trường khác với mô phỏng.
 
-Bằng chứng v1: `R-base-prepared-20261119-161437-fe1b1b`. Bằng chứng v2: `R-S7-grade-20261119-170259-5993e2` (`PASS-VISIBLE`).
+Bằng chứng v1: `R-base-prepared-20261119-161437-fe1b1b`. Bằng chứng v2: `R-S7-grade-20261119-170412-498db4` (`PASS-VISIBLE`).
 
 ## Số liệu cần đặt cạnh nhau trên màn hình
 

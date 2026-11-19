@@ -71,9 +71,9 @@ nhau chia cho số lần chạy có sự kiện `proposal`; lần chạy không 
 
 ### Câu 1.5 · Chọn MỘT kết luận và giải thích một câu
 
-Số minh hoạ trong đề (không phải số của bàn). Khoanh: **(a) · (b) · (c) · (d)**
+Số minh hoạ trong đề (không phải số của bàn). Khoanh: (a) · [x] (b) · (c) · (d)
 
-Giải thích một câu: …
+Giải thích một câu: Y (50/50) chỉ hơn X (49/50) một lần chạy, mà 1,0 vẫn nằm trong khoảng tin cậy 95% [0,94; 1,0] của X, nên chưa nói được Y tốt hơn X. Bàn loại (a) vì chênh lệch này không có ý nghĩa thống kê, loại (c) vì chưa phân biệt được khác với chắc chắn như nhau, và loại (d) vì X đạt hay không là do ngưỡng đã ký; chạy thêm seed chỉ làm khoảng tin cậy hẹp lại.
 
 ---
 
@@ -112,10 +112,10 @@ Giải thích một câu: …
 
 | Câu hỏi soát | Ghi chú của bàn |
 |---|---|
-| Chỉ số này có ý nghĩa với **mọi** bên liên quan không (khách, hãng vận chuyển, shop, người duyệt, kế toán)? | |
-| Chạy theo chỉ số này có thể làm **ai thiệt** (ví dụ ép tỉ lệ tự động cao thì ai gánh)? | |
-| Đây có phải nghĩa của "thành công" ở **ngày 1** của pilot không? | |
-| Còn ở **ngày thứ 1.000** (12 depot, chính sách đã đổi vài lần)? Ngưỡng nào sẽ phải viết lại? | |
+| Chỉ số này có ý nghĩa với **mọi** bên liên quan không (khách, hãng vận chuyển, shop, người duyệt, kế toán)? | Không có chỉ số nào một mình đủ cho mọi bên. `pass_rate` và `pass_k` đo phía khách: có được hoàn đúng không. Hãng cần `wrongful_carrier_faults_max`, vì mỗi lỗi ghi oan làm GHSH mất 150.000đ, còn GHSH và DNB bị đình chỉ sau 3 lỗi trong 7 ngày. Chị Oanh cần `wrongful_refund_vnd_max` vì nó tính bằng tiền và khớp được với sổ cái, tỉ lệ thì không khớp được. Chị Hạnh cần `escalation_rate_max`. Bàn giữ cả bộ chỉ số, không gộp về một con số. |
+| Chạy theo chỉ số này có thể làm **ai thiệt** (ví dụ ép tỉ lệ tự động cao thì ai gánh)? | Ép `escalation_rate` xuống thì trợ lý tự quyết nhiều hơn, và người gánh là hãng (bị ghi lỗi oan, mất tiền phạt) cùng chị Oanh (phải đối soát và đòi lại tiền hoàn sai). Để nó cao thì chị Hạnh gánh: một người duyệt xử lý 6 ca/giờ, tức 48 ca trong ca làm 480 phút; quá mức đó là vỡ SLA 60 phút và ca bị ùn (`queue_stuck`). Ép `pass_rate` lên bằng cách hoàn rộng tay thì LogiX mất tiền, trong khi trần hoàn tự động là 300.000đ/khách/ngày và ngân sách là 2.000.000đ/ngày. Ngưỡng tỉ lệ phải đi cùng ngưỡng tiền và ngưỡng ùn trong `business_ops`. |
+| Đây có phải nghĩa của "thành công" ở **ngày 1** của pilot không? | Với các ngưỡng an toàn thì có. Ngày 1 thành công trước hết là không hoàn sai, không ghi lỗi oan cho hãng và không rò dữ liệu cá nhân; ba ngưỡng này nên để 0. `pass_rate` cao mà còn một lỗi ghi oan cho hãng thì vẫn chưa đạt. Pilot chỉ có 2 depot và đo trên bộ nền 22 ticket × 5 seed, nên `pass_k` (đúng cả 5/5 lần chạy) quan trọng hơn `pass_rate`: người duyệt cần trợ lý chạy ổn định, đúng trung bình thì chưa đủ. |
+| Còn ở **ngày thứ 1.000** (12 depot, chính sách đã đổi vài lần)? Ngưỡng nào sẽ phải viết lại? | Ít nhất ba chỗ. Thứ nhất, REFUND-v4 có hiệu lực từ 01/12/2026, hai tuần sau mốc dữ liệu 16/11: hạn mức hoàn tự động hạ từ 200.000đ xuống 100.000đ và trễ do bất khả kháng không còn ghi lỗi hãng, nên ngưỡng chuyển người duyệt và cách đếm `wrongful_carrier_faults` phải đổi theo. Thứ hai, khi có 12 depot và kho sỉ HCM-B2B (mỗi đơn từ 2 triệu), `wrongful_refund_vnd_max` tính theo tổng không còn hợp lý; nên tính theo từng kho hoặc theo tỉ lệ trên doanh số. Thứ ba, `escalation_rate_max` và `queue_stuck_max` phụ thuộc số người duyệt, nên phải tính lại theo số người trực khi lượng ticket tăng. Ngày xem lại tiêu chí nên đặt trước 01/12/2026. |
 
 #### Bước 3 · Chốt và hẹn ngày xem lại
 

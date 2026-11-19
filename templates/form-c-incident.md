@@ -1,6 +1,6 @@
 # Phiếu C · Sự cố và quyết định v2 · Khối 3 (phút 125–200)
 
-**Bàn:** ______ · **Thẻ đã bốc:** ___ *(để trống tới phút 125; bốc số xong thì ghi đúng số đó, ví dụ `S3`. Lab Coach đối chiếu với sổ; lệnh tự kiểm tra in dòng này trong report.)*
+**Bàn:** Fourguys · **Thẻ đã bốc:** S7
 
 Mở `incidents/Sx/card.md` của đúng số đã bốc. Các bước trên thẻ trỏ về đúng mục trong phiếu này. Mục C3 chỉ điền phần ứng với
 số thẻ của bàn; các phần khác để trống.
@@ -185,16 +185,15 @@ Chỉ cần hai mốc có trong thẻ; mốc còn lại để trống nếu khô
 
 | Mốc | Nhóm | Tình huống cụ thể (lấy từ thẻ / ticket) | Dữ liệu của hệ thống liên quan (trường nào, đi tới đâu) | Điều người đó biết / không biết |
 |---|---|---|---|---|
-| **Tin quá mức** | người đặt hàng | | | |
-| **Tin quá mức** | người nhận hàng | | | |
-| **Không tin** (sau sự cố) | người nhận hàng | | | |
-| **Tin vừa đủ** (trạng thái muốn tới) | cả hai | | | |
+| **Tin quá mức** | người đặt hàng | Gửi yêu cầu hoàn phí cho đơn quà và tin rằng thông tin người nhận chỉ phục vụ giao hàng. Thẻ nêu trường hợp khách không nhập thông tin đó trong ticket nhưng thông báo vẫn có. | Tên và số điện thoại có thể lấy từ `orders[].recipient` và được đưa vào `recipient_contact` gửi hãng. Nội dung ticket cũng có thể được đưa vào `customer_note`. | Biết nội dung mình đã nhập, chưa thấy các trường ứng dụng tự lấy từ đơn và chuyển cho hãng. |
+| **Tin quá mức** | người nhận hàng | Trước cuộc gọi, người nhận có thể tin rằng việc người khác đặt quà không cho phép hãng lấy số điện thoại qua quy trình hoàn phí. | Thông tin liên hệ có thể được lấy từ đơn quà và đi qua `notify_carrier`. | Người nhận không dùng trợ lý và cho biết chưa cung cấp số cho hãng. Niềm tin trước cuộc gọi là giả thuyết dựa trên lời phản ánh. |
+| **Không tin** (sau sự cố) | người nhận hàng | Hãng gọi xin lỗi vì giao trễ và đọc đúng tên, địa chỉ nhà. | Pháp chế ghi nhận thông báo có thông tin liên hệ. Email chưa xác định địa chỉ đầy đủ đến từ nguồn nào. | Biết hãng có thông tin liên hệ, chưa biết hệ thống đã chia sẻ những gì và theo căn cứ nào. |
+| **Tin vừa đủ** (trạng thái muốn tới) | cả hai | Người đặt biết kênh thông báo lỗi dùng dữ liệu tối thiểu để đối soát. Người nhận không cần thao tác để giới hạn lần chia sẻ qua kênh này. | Chỉ mã đơn, mã kiện, quận/huyện và số ngày trễ từ dữ liệu đã xác minh. | Người đặt có thể xem phạm vi chia sẻ; giới hạn được thực thi ở đầu ra cho cả người nhận không dùng hệ thống. |
 
 **Rút ra:**
-- Dữ liệu nào rời hệ thống mà người liên quan **không biết** là nó rời đi: `__________` → tới `__________`.
-- Để lòng tin khớp thực tế, có hai đường: **giải thích** cho người dùng dữ liệu đi đâu, hoặc **làm cho hệ thống chỉ làm đúng
-  điều người ta tưởng**. Với người nhận hàng (không có kênh nào để giải thích), đường khả thi là: `__________`.
-- Biện pháp đó là giảm khả năng lộ hay bảo đảm không lộ: `__________`.
+- Tên và số điện thoại từ hồ sơ người nhận quà có thể rời LogiX qua `recipient_contact` → hãng vận chuyển. Ghi chú tự do có thể tạo thêm một đường chia sẻ.
+- Với người nhận không dùng trợ lý, thực thi giới hạn ở đầu ra: xây payload từ đúng các trường cấu trúc được phép và xác minh nguồn của từng giá trị trước khi gửi.
+- Cách này có thể ngăn việc gửi trường ngoài danh sách trong `notify_carrier` nếu mọi thông báo đi qua cổng và giá trị đi từ nguồn tin cậy đã kiểm tra. Dò và che nội dung tự do chỉ giảm khả năng lọt.
 
 ### C3.4 · Hiệu chỉnh lòng tin · nhân viên duyệt và trưởng ca đứng tên (S8)
 
@@ -249,15 +248,15 @@ Bắt buộc: ít nhất ba dòng, trong đó **một dòng là nhánh bàn chư
 
 ### Câu 3.2 · Một specification mà nếu bị vi phạm thì gây ra tác hại trên thẻ
 
-Kiểm được bằng code hoặc bằng một con số trong report: …
+Mỗi `notify_carrier` được gửi chỉ có `order_id`, `parcel_id`, `district`, `delay_days` theo hợp đồng S7. Mã đơn/kiện phải khớp bản ghi, `district` chỉ chứa quận/huyện đã xác minh và `delay_days` là số ngày trễ từ tracking. Loại bỏ ghi chú tự do và dữ liệu liên hệ, kể cả dữ liệu lấy từ hồ sơ người nhận. Khi dữ liệu được phép thiếu hoặc không hợp lệ, chuyển xác minh và giữ thông báo lại.
 
-Kiểm bằng gì (hàm trong `guards.py`, dòng report nào): …
+Kiểm nhánh `notify_carrier` trong `write_gate` và payload thực tế ở `GỬI HÃNG` trong trace, gồm cả đơn quà mà ticket không ghi thông tin liên hệ. Đối chiếu `pii_leaks_max = 0` đã ký, đồng thời kiểm riêng trường ngoài hợp đồng và nguồn giá trị của bốn trường.
 
 ### Câu 3.3 · Một giả định về môi trường mà người thiết kế đã ngầm tin, nhưng nhiều khả năng sai ngoài thực tế
 
-Giả định (thứ nằm NGOÀI phần mềm): …
+Giả định: người đặt có thể đại diện cho người nhận quà khi đồng ý sử dụng thông tin liên hệ để hãng gọi xin lỗi về giao trễ.
 
-Vì sao có thể sai: …
+Người nhận quà không tham gia yêu cầu hoàn phí và cho biết chưa cung cấp số cho hãng. Việc dùng thông tin để giao hàng chưa xác lập rằng người nhận đồng ý với cuộc gọi phát sinh từ thông báo lỗi. Pháp chế cần xác nhận căn cứ và mục đích chia sẻ.
 
 ---
 

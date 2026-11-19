@@ -15,3 +15,5 @@ config/operating_gates.round1.json -text
 submission/config/acceptance_criteria.json -text
 submission/code/guards_round1.py -text
 submission/config/operating_gates.round1.json -text
+# The submission manifest hashes copied bytes, so keep every collected artifact byte-stable.
+submission/** -text

@@ -475,6 +475,6 @@ Cột v1 nằm ở Phiếu B mục B8; không sửa cột đó.
 - Bộ thử chưa xác nhận mọi hệ thống hãng nhận đúng bốn trường sau các bước chuyển tiếp. Trong pilot, cần đối soát mẫu payload ở đầu gửi và đầu nhận trước khi mở rộng.
 
 **Ba dòng bắt buộc** (chép nguyên ba câu này sang `submission/submission.json`, mục `three_lines`)
-1. Giả định mỗi hãng nhận và xử lý thông báo lỗi theo đúng hợp đồng bốn trường, kể cả khi thông báo đi qua hệ thống trung gian.
+1. Giả định mỗi hãng nhận và xử lý thông báo lỗi chỉ theo đúng hợp đồng 4 trường (`order_id`, `parcel_id`, `district`, `delay_days`), kể cả khi thông báo đi qua hệ thống trung gian.
 2. Cổng vòng 1 ngăn gửi trường ngoài allowlist qua `notify_carrier` trên các ca S7 đã đo; số lần lộ PII giảm từ 30 xuống 0 ở `prepared`. Cần xác minh cả giá trị của trường hợp lệ và các kênh chuyển tiếp khi chạy thật.
-3. Trước Gate 2, đối soát mẫu payload thông báo đơn quà ở đầu gửi và đầu nhận theo hãng, đo số thông báo có trường ngoài hợp đồng hoặc chứa PII và tạm dừng luồng liên quan khi xác nhận có một lần lộ.
+3. Trước Gate 2, đối soát mẫu payload thông báo đơn quà ở đầu gửi và đầu nhận theo từng hãng (VNX, GHSH, DNB là 3 hãng bị lộ ở mốc base S7), đếm số thông báo có trường ngoài 4 trường hợp đồng hoặc chứa PII (mục tiêu 0) và tạm dừng luồng liên quan khi xác nhận có một lần lộ.

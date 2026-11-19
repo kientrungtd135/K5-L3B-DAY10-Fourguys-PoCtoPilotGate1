@@ -2,9 +2,16 @@
 # để hash của các file khoá khớp lab10/MANIFEST.json bất kể cấu hình core.autocrlf của từng máy.
 * text=auto eol=lf
 
-# Ba file dưới đây được ký / chốt trên máy Windows (core.autocrlf=true), nên hash trong
-# config/acceptance_criteria.lock và config/round1.lock được tính trên bản xuống dòng CRLF.
-# Giữ nguyên từng byte (không đổi xuống dòng) để hash khớp trên mọi máy. Nội dung không đổi.
-config/acceptance_criteria.json -text
+# Tiêu chí được ký trên máy Windows (core.autocrlf=true): hash trong config/acceptance_criteria.lock tính trên
+# bản xuống dòng CRLF. Git vẫn lưu đúng blob của commit ký (LF); dòng này chỉ bắt mọi máy checkout file ở dạng CRLF
+# để hash khớp. Nội dung tiêu chí không đổi.
+config/acceptance_criteria.json text eol=crlf
+
+# Bản chốt vòng 1 cũng được chốt trên máy Windows: giữ nguyên từng byte CRLF để hash khớp config/round1.lock.
 lab10/guards_round1.py -text
 config/operating_gates.round1.json -text
+
+# Bản sao do lệnh 7 (check_submission --collect) gom vào submission/: giữ nguyên byte để khớp hash đã ký và đã chốt.
+submission/config/acceptance_criteria.json -text
+submission/code/guards_round1.py -text
+submission/config/operating_gates.round1.json -text

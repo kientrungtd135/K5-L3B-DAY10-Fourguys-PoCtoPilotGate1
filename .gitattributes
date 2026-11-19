@@ -1,0 +1,10 @@
+# Mọi file chữ luôn checkout với xuống dòng LF trên mọi máy (Windows, Mac, Linux),
+# để hash của các file khoá khớp lab10/MANIFEST.json bất kể cấu hình core.autocrlf của từng máy.
+* text=auto eol=lf
+
+# Ba file dưới đây được ký / chốt trên máy Windows (core.autocrlf=true), nên hash trong
+# config/acceptance_criteria.lock và config/round1.lock được tính trên bản xuống dòng CRLF.
+# Giữ nguyên từng byte (không đổi xuống dòng) để hash khớp trên mọi máy. Nội dung không đổi.
+config/acceptance_criteria.json -text
+lab10/guards_round1.py -text
+config/operating_gates.round1.json -text

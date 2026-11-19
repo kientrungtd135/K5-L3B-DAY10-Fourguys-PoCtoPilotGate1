@@ -34,8 +34,8 @@ Mỗi lệnh `lab10.eval` và `lab10.grade` tự ghi một dòng vào `runs/jour
 | 2 | `R-S7-after-20261119-163314-5d2989` | S7 · after | Chạy grade trước khi sửa; không đổi code so với prepared | 1.0 [1.0, 1.0] | 1.0 | 0 · 0 · 0 | 0.0 | Giống prepared; review rate gồm kiểm mẫu là 0.1667, chờ lâu nhất 0 phút, ROI 0.55. |
 | 3 | `R-S7-after-20261119-165032-fe1b1b` | S7 · after | Chạy eval sau khi nhận S7; chưa đổi guard/config, trước monitor C8 | 1.0 [1.0, 1.0] | 1.0 | 0 · 0 · 0 | 0.0 | Không lộ PII, pass 30/30; chi phí 6.434đ/ticket, ROI 0.55, 0 ca ùn. |
 | 4 | `R-base-after-20261119-165032-fe1b1b` | base · after | Kiểm regression trên bộ nền; cùng cấu hình trước C8 | 1.0 [1.0, 1.0] | 1.0 | 0 · 0 · 0 | 0.2308 | Không có ca mới hỏng; mọi ngưỡng đã ký đạt, 9 ticket ngoài phạm vi tiếp tục làm tay. |
-| 5 | `R-S7-after-20261119-170009-498db4` | S7 · after | Thêm monitor `customer_text_contact_rate` và `carrier_payload_contact_rate` (không đổi guard, config) | 1.0 [1.0, 1.0] | 1.0 | 0 · 0 · 0 | 0.0 | Kết quả giữ nguyên; `customer_text_contact_rate` 0,5 trên S7 so với 0 trên bộ nền, nên vẫn sáng đèn sau khi cổng đã chặn. |
-| 6 | `R-base-after-20261119-170010-498db4` | base · after | Kiểm lại bộ nền sau khi thêm monitor | 1.0 [1.0, 1.0] | 1.0 | 0 · 0 · 0 | 0.2308 | Không có ca mới hỏng; grade `R-S7-grade-20261119-170010-498db4` cho PASS-VISIBLE, cả 5 dòng kiểm tra đều ✅. |
+| 5 | (chạy trên máy TV2, không có trong nhật ký nộp; kết quả trùng dòng 7) | S7 · after | Thêm monitor `customer_text_contact_rate` và `carrier_payload_contact_rate` (không đổi guard, config) | 1.0 [1.0, 1.0] | 1.0 | 0 · 0 · 0 | 0.0 | Kết quả giữ nguyên; `customer_text_contact_rate` 0,5 trên S7 so với 0 trên bộ nền, nên vẫn sáng đèn sau khi cổng đã chặn. |
+| 6 | (chạy trên máy TV2, không có trong nhật ký nộp; kết quả trùng dòng 8) | base · after | Kiểm lại bộ nền sau khi thêm monitor | 1.0 [1.0, 1.0] | 1.0 | 0 · 0 · 0 | 0.2308 | Không có ca mới hỏng; grade dòng 9 cho PASS-VISIBLE, cả 5 dòng kiểm tra đều ✅. |
 | 7 | `R-S7-after-20261119-170348-498db4` | S7 · after | TV1 xác nhận sau C8/C9; không đổi guard/config | 1.0 [1.0, 1.0] | 1.0 | 0 · 0 · 0 | 0.0 | 30/30 đạt; `customer_text_contact_rate` 0.5, `carrier_payload_contact_rate` 0; ROI 0.55, không ùn. |
 | 8 | `R-base-after-20261119-170405-498db4` | base · after | TV1 kiểm regression sau C8/C9; không đổi guard/config | 1.0 [1.0, 1.0] | 1.0 | 0 · 0 · 0 | 0.2308 | Không có ca mới hỏng; hai monitor liên hệ đều 0; 9 ticket ngoài phạm vi tiếp tục làm tay. |
 | 9 | `R-S7-grade-20261119-170412-498db4` | S7 · grade | Grade sau khi chạy S7 after và base after hậu C8/C9 | — | — | — | — | PASS-VISIBLE: integrity, criteria, visible, regression, monitor đều đạt; không có hidden tests trên máy. |
@@ -353,13 +353,13 @@ Thẻ S5 dùng mục này cho một con số kinh doanh: chi phí mỗi ticket t
 | **Cách tính** (công thức, mẫu số, cách xử lý ca thiếu dữ liệu) | Số ticket có chữ khớp mẫu số điện thoại (bắt đầu bằng `0` hoặc `+84`, đủ 10 chữ số, cho phép dấu cách, chấm, gạch như `0987 654 321`) hoặc mẫu địa chỉ (`ngõ`, `ngách`, `hẻm`, `kiệt`, `số nhà` đi cùng con số), chia cho tổng số ticket trong khung thời gian. Ticket không có chữ vẫn nằm ở mẫu số và tính là không khớp. Mẫu số bằng 0 thì trả 0. Dãy số không bắt đầu bằng 0 hay 84, như mã vận đơn `8840012345` của `S7-05`, không bị tính. |
 | **Khung thời gian / ngưỡng báo động** | Tính theo ngày và tách theo kho. Bộ nền đo được 0, nên báo động khi vượt 10% số ticket trong ngày hoặc gấp đôi trung bình 7 ngày: báo vào `#logix-refund-pilot-alerts`, NV-TUNG kiểm ngay `carrier_payload_contact_rate`. `carrier_payload_contact_rate` chỉ cần lớn hơn 0 một lần là áp điều kiện dừng đã có trong config: tắt `notify_carrier` ngay. |
 | **Điểm mù** (chỉ số này KHÔNG thấy gì) | Không thấy dữ liệu đi theo đường không qua chữ khách: `recipient_contact` lấy từ hồ sơ đơn quà (`S7-20`, `S7-21` có chữ sạch nên không bị tính); phần này phải xem `carrier_payload_contact_rate`. Không bắt được số viết bằng chữ, số bàn hay số nước ngoài, email, địa chỉ không có con số. Bản thân chỉ số không cho biết dữ liệu có thật sự rời hệ thống hay không. |
-| Giá trị trên bộ nền · trên thẻ (đọc mục `monitor` của report) | `customer_text_contact_rate`: bộ nền 0 ở cả base và after; S7 base 0,625 (5/8 ticket), S7 after 0,5 (3/6 ticket trong phạm vi HN, HCM). `carrier_payload_contact_rate`: bộ nền 0; S7 base 0,75 (khớp `pii_leaks` 30/40), S7 after 0. Nguồn: `R-S7-grade-20261119-170010-498db4`, `R-S7-after-20261119-170009-498db4`, `R-base-after-20261119-170010-498db4`. |
+| Giá trị trên bộ nền · trên thẻ (đọc mục `monitor` của report) | `customer_text_contact_rate`: bộ nền 0 ở cả base và after; S7 base 0,625 (5/8 ticket), S7 after 0,5 (3/6 ticket trong phạm vi HN, HCM). `carrier_payload_contact_rate`: bộ nền 0; S7 base 0,75 (khớp `pii_leaks` 30/40), S7 after 0. Nguồn: `R-S7-grade-20261119-170412-498db4`, `R-S7-after-20261119-170348-498db4`, `R-base-after-20261119-170405-498db4`. |
 
 ---
 
 <a id="c9"></a>
 
-## C9 · Câu 3.7 · Fault tree SAU khi sửa (mã lần chạy: `R-S7-after-20261119-170009-498db4`)
+## C9 · Câu 3.7 · Fault tree SAU khi sửa (mã lần chạy: `R-S7-after-20261119-170348-498db4`)
 
 Vẽ lại cây ở C6. Ở mỗi nhánh đã xử lý, thêm một nút `VÀ [gate … hỏng]` và ghi:
 

@@ -62,7 +62,7 @@ Có dùng AI (Claude Code) để đọc code, chạy trace và eval, soạn nhá
 
 ### Bằng chứng
 
-Commit `40d4ec6` (Phiếu A), `f4dc1e1`, `329fac7`, `d6bf0d6` (Phiếu B và `monitors.py`), `878cdb8` (C2, C6), `1641ca6` (C8, C9, C0 dòng 5–6), `3f0c948`, `b47206b` (`.gitattributes`). Lần chạy trên máy mình: `R-base-before-20261119-154024-4d2299` (B2), `R-S7-before-20261119-164336-fe1b1b`, `R-S7-after-20261119-170009-498db4`, `R-base-after-20261119-170010-498db4`, `R-S7-grade-20261119-170010-498db4`; P1 chạy lại ra cùng số ở `R-S7-after-20261119-170348-498db4`. Dòng trong phiếu: Phiếu A A3, A4 bước 2; Phiếu B B2, B7.2, B7.3; Phiếu C C2, C6, C8, C9.
+Commit `40d4ec6` (Phiếu A), `f4dc1e1`, `329fac7`, `d6bf0d6` (Phiếu B và `monitors.py`), `878cdb8` (C2, C6), `1641ca6` (C8, C9, C0 dòng 5–6), `3f0c948`, `b47206b` (`.gitattributes`). Lần chạy trong nhật ký nộp mà các mục của mình trích: `R-base-before-20261119-153634-4d2299` (B2), `R-S7-before-20261119-163314-5d2989` (C2, C6), `R-S7-after-20261119-170348-498db4` và `R-base-after-20261119-170405-498db4` (C8, C9), `R-S7-grade-20261119-170412-498db4` (C8). Mình cũng chạy các lần tương đương trên máy mình để kiểm số; các lần đó không nằm trong nhật ký nộp nhưng cho kết quả trùng. Dòng trong phiếu: Phiếu A A3, A4 bước 2; Phiếu B B2, B7.2, B7.3; Phiếu C C2, C6, C8, C9.
 
 ### Exit ticket
 

@@ -59,7 +59,7 @@ python3 -m lab10.grade --incident Sx
 
 | Lý do thất bại (viết ở thì quá khứ) | Lăng kính | Kiểm được bằng gì (trace / data / config nào) |
 |---|---|---|
-| | | |
+| Không ai kiểm tra nội dung thông báo hãng sau khi trợ lý tạo payload, nên nhánh lộ dữ liệu không bị người phát hiện trước khi gửi. | Con người và vận hành | C6 nhánh [3]; `R-S7-before-20261119-163314-5d2989`: 30 PII leaks, review rate 0. |
 
 ---
 
@@ -326,7 +326,7 @@ python3 -m lab10.grade --incident Sx
 
 | Nhánh fault tree | Nguyên nhân | Chỗ sửa (hàm + nhánh trong `guards.py`, hoặc khoá trong `operating_gates.json`) | Tầng (phát hiện / chặn / giới hạn thiệt hại / vận hành) | GIẢM khả năng hay NGĂN hẳn? Vì sao | Mã lần chạy sau khi sửa |
 |---|---|---|---|---|---|
-| S7: PII qua `notify_carrier` (chờ TV2 đánh số trong C6) | `S7-20@11`: ticket không có liên hệ nhưng payload chứa `recipient_contact` tên/số điện thoại từ đơn; `S7-01@11` còn đưa `customer_note` có số điện thoại/địa chỉ ra hãng. | Giữ `write_gate` ở `notify_carrier`: chỉ cho trường trong `carrier_notice_fields`, loại trường bị chặn theo `legal`. | Chặn trước khi gửi | **Ngăn** gửi các trường ngoài allowlist qua nhánh này: `S7-20@11` ghi nhận cả `customer_note` và `recipient_contact` bị loại; PII leaks 30 → 0. Chưa bảo đảm giá trị bên trong trường được phép không bị nhiễm PII hoặc không có đường gửi khác. | `R-S7-after-20261119-165032-fe1b1b` |
+| C6 [1] + [2]: PII qua `notify_carrier` | `S7-20@11`: ticket không có liên hệ nhưng payload chứa `recipient_contact` tên/số điện thoại từ đơn; `S7-01@11` còn đưa `customer_note` có số điện thoại/địa chỉ ra hãng. | Giữ `write_gate` ở `notify_carrier`: chỉ cho trường trong `carrier_notice_fields`, loại trường bị chặn theo `legal`. | Chặn trước khi gửi | **Ngăn** gửi các trường ngoài allowlist qua nhánh này: `S7-20@11` ghi nhận cả `customer_note` và `recipient_contact` bị loại; PII leaks 30 → 0. Chưa bảo đảm giá trị bên trong trường được phép không bị nhiễm PII hoặc không có đường gửi khác. | `R-S7-after-20261119-165032-fe1b1b` |
 | [2] | | | | | |
 | [3] | | | | | |
 

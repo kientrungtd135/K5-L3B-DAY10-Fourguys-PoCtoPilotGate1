@@ -68,7 +68,7 @@ Sản phẩm và kinh doanh; phụ trách `config/acceptance_criteria.json`, m�
 
 ### Đóng góp cụ thể
 
-Soạn mục tiêu cấp hệ thống, câu tiêu chí đề xuất, bản đồ dữ liệu và ví dụ thay đổi chính sách; đối chiếu các mốc chi phí và trần hoàn tiền để chuẩn bị quyết định Gate 1. Có dùng AI để đọc repo, hỗ trợ soạn phiếu và chuẩn bị demo.
+Soạn mục tiêu cấp hệ thống, ngưỡng và quy tắc quyết định Gate 1, bản đồ dữ liệu và ví dụ thay đổi chính sách. Chọn phạm vi HN/HCM, ngân sách hoàn tự động và giới hạn chi phí dựa trên dữ liệu mô phỏng. Có dùng AI để đọc repo, hỗ trợ soạn phiếu, chọn ngưỡng và chuẩn bị demo.
 
 ### Bằng chứng
 

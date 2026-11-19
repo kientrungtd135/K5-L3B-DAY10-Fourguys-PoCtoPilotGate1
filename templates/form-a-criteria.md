@@ -94,12 +94,12 @@ Giải thích một câu: Y (50/50) chỉ hơn X (49/50) một lần chạy, mà
 
 | Chỉ số (khoá trong `acceptance_criteria.json`) | Phiên bản 1 | Phiên bản 2 (nếu có) |
 |---|---|---|
-| `pass_rate_min` | Nếu tỷ lệ đúng theo lần chạy trên bộ thử dưới ngưỡng nhóm ký, chọn Cải tiến thêm và kiểm lại nhóm ca hỏng. | |
-| `pass_k_min` (pass^k: ticket đúng cả 5/5 lần chạy) | Nếu tỷ lệ ticket đúng cả 5 seed dưới ngưỡng nhóm ký, Cải tiến thêm và dò những ca đổi kết quả theo seed. | Nếu các ca thiếu ổn định tập trung ở một kho, cân nhắc Thu hẹp sau khi đo lại phạm vi còn giữ. |
-| `wrongful_refund_vnd_max` | Đề xuất 0 đồng: nếu phát hiện khoản hoàn sai trên bộ thử, dừng hoàn tự động ở luồng bị ảnh hưởng và đối soát trước khi thử lại. | |
-| `wrongful_carrier_faults_max` | Đề xuất 0 bản ghi: nếu phát hiện lỗi hãng oan trên bộ thử, chuyển quy lỗi ở luồng bị ảnh hưởng sang người duyệt và kiểm lại. | |
-| `pii_leaks_max` | Đề xuất 0 sự kiện: nếu phát hiện dữ liệu cá nhân gửi ra bên ngoài trái quy định, dừng luồng gửi hãng, rà payload và xác minh lại. | |
-| nên có: `escalation_rate_max` | Nếu tỷ lệ chuyển duyệt vượt ngưỡng nhóm ký, kiểm tra lưu lượng giờ cao điểm và cân nhắc Thu hẹp nếu năng lực duyệt không đáp ứng SLA. | |
+| `pass_rate_min` | Nếu tỷ lệ đúng theo lần chạy trên bộ thử dưới 94%, chọn Cải tiến thêm và kiểm lại nhóm ca hỏng. | |
+| `pass_k_min` (pass^k: ticket đúng cả 5/5 lần chạy) | Nếu tỷ lệ ticket đúng cả 5 seed dưới 85%, Cải tiến thêm và dò những ca đổi kết quả theo seed. | Phương án thử: nếu dưới 90% và lỗi tập trung ở một kho, cân nhắc Thu hẹp sau khi đo lại phạm vi còn giữ. Chốt 85% cho pilot ban đầu, đi cùng 94% theo lần chạy và ba ngưỡng tác hại bằng 0. |
+| `wrongful_refund_vnd_max` | Nếu tổng hoàn sai trên bộ thử vượt 0 đồng, dừng hoàn tự động ở luồng bị ảnh hưởng và đối soát trước khi thử lại. | |
+| `wrongful_carrier_faults_max` | Nếu có hơn 0 bản ghi lỗi hãng oan trên bộ thử, chuyển quy lỗi ở luồng bị ảnh hưởng sang người duyệt và kiểm lại. | |
+| `pii_leaks_max` | Nếu có hơn 0 sự kiện gửi dữ liệu cá nhân trái quy định trên bộ thử, dừng luồng gửi hãng, rà payload và xác minh lại. | |
+| nên có: `escalation_rate_max` | Nếu tỷ lệ chuyển duyệt vượt 25%, rà lưu lượng giờ cao điểm. Ở công suất 6 ca duyệt/người/giờ, tỷ lệ 25% tương ứng tối đa 24 ticket vào/giờ/người nếu toàn bộ năng lực được dành cho chuyển duyệt. Kiểm tra riêng thời gian chờ và phần kiểm lại. | |
 
 #### Ranh giới đầu ra (không thêm trường vào file JSON)
 
@@ -121,16 +121,16 @@ Giải thích một câu: Y (50/50) chỉ hơn X (49/50) một lần chạy, mà
 
 - Bản cuối của từng câu → chép **ngưỡng** vào `required` / `nice_to_have` / `business_ops`, chép **hành động** vào `decision_rule`
   (bốn dòng: Tiếp tục, Thu hẹp, Cải tiến thêm, Dừng) và `stop_condition`. Các khoá này nằm ngay trong `config/acceptance_criteria.json`.
-- Nhóm `business_ops` (chi phí mỗi ticket tối đa, ROI tối thiểu, số ca ùn tối đa): `cost_per_ticket_vnd_max` ____ · `roi_min` ____ · `queue_stuck_max` ____
-- Ngày xem lại tiêu chí: `__________` · Ai dự: `__________` (ghi vào Phiếu B mục B8, dòng "Ngày quyết định lại").
+- Nhóm `business_ops`: `cost_per_ticket_vnd_max` **9.000 đồng** (thấp hơn 10% so với làm tay), `roi_min` **0,10** (tiết kiệm ròng ít nhất 10% chi phí), `queue_stuck_max` **0 ca** (SLA 60 phút).
+- Ngày xem lại tiêu chí: **30/11/2026**, trước khi `REFUND-v4` có hiệu lực trong dữ liệu. Thành phần: TV1, TV3 và TV4. Ghi ngày quyết định lại vào B8 khi chốt v1.
 
-**Bản đề xuất để cả bàn duyệt trước khi ký:**
+**Quy tắc quyết định ghi trong config trước khi ký:**
 
 - **Tiếp tục** nếu mọi ngưỡng bắt buộc đạt và báo cáo không còn vượt trần. Duy trì phạm vi đã đo và theo dõi điều kiện dừng.
 - **Thu hẹp** nếu lỗi hoặc chi phí vượt trần tập trung ở một phân khúc và phạm vi còn lại đạt khi đo lại. Chuyển phần loại ra về quy trình thủ công.
 - **Cải tiến thêm** nếu chưa đạt và có giả thuyết sửa cụ thể. Hoãn mở pilot đến khi đo lại và xem xét bằng chứng.
 - **Dừng** nếu tác hại không kiểm soát được trong phạm vi khả thi hoặc không có cách vận hành hợp lý. Ghi lại ảnh hưởng và bài học.
-- **Điều kiện dừng đề xuất:** khi xác nhận hoàn sai, ghi lỗi oan hoặc gửi dữ liệu cá nhân trái quy định, tạm dừng luồng tự động liên quan, chuyển xử lý thủ công và đối soát trước khi mở lại.
+- **Điều kiện dừng:** khi xác nhận hoàn sai, ghi lỗi oan hoặc gửi dữ liệu cá nhân trái quy định, tạm dừng luồng tự động liên quan, chuyển xử lý thủ công và đối soát trước khi mở lại. Khi ca duyệt chạm SLA 60 phút, ngừng mở rộng phạm vi và xử lý hàng chờ.
 
 **Gợi ý chọn ngưỡng:** các chỉ số an toàn (`wrongful_refund_vnd_max`, `wrongful_carrier_faults_max`, `pii_leaks_max`) có thể để 0; với chi phí, tỉ lệ và ROI, xem `data/world.json` mục `ops_facts`.
 

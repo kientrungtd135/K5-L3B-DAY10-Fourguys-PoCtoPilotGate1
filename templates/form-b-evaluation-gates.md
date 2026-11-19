@@ -304,10 +304,10 @@ Mỗi con số kèm một câu lý do, lấy từ `data/world.json` → `ops_lim
 
 | Khoá | Giá trị bàn đặt | Lý do (một câu, có số) |
 |---|---|---|
-| `business.daily_refund_cap_vnd` | Chờ nhóm chốt | Trần Finance là 2.000.000 đồng hoàn tự động/ngày; nếu pilot cần biên an toàn thì chọn mức thấp hơn. |
-| `business.cost_budget_per_ticket_vnd` | Chờ nhóm chốt | Mốc so sánh là 10.000 đồng/ticket làm tay; chi phí LLM có trần riêng 1.500 đồng/ticket. |
-| `business.pilot_scope` (all / warehouse / percent) | Chờ nhóm chốt | Đối chiếu lưu lượng giờ cao điểm với 6 ca duyệt/người/giờ và SLA 60 phút để chọn độ phủ. |
-| `business.roi_min` | Chờ nhóm chốt | ROI 0 là hòa vốn; mỗi người trực thêm có phí 30.000 đồng/ca, nên cần tính cả chi phí này khi chốt biên. |
+| `business.daily_refund_cap_vnd` | 1.800.000 đồng/ngày | Giữ 200.000 đồng dự phòng dưới trần hoàn tự động 2.000.000 đồng/ngày của Finance. |
+| `business.cost_budget_per_ticket_vnd` | 9.000 đồng/ticket | Đặt mức chi thấp hơn 10% so với 10.000 đồng làm tay; kiểm riêng trần LLM 1.500 đồng/ticket. |
+| `business.pilot_scope` (all / warehouse / percent) | `warehouse`, `HN` và `HCM` | Bắt đầu với 2 kho đơn lẻ, tương ứng 13/22 ticket đầu vào bộ nền. Kiểm tải duyệt theo công suất 6 ca/người/giờ và SLA 60 phút. Các kho khác, gồm kho sỉ HCM-B2B, tiếp tục xử lý thủ công. |
+| `business.roi_min` | 0,10 | Yêu cầu tiết kiệm ròng ít nhất 10% chi phí sau khi tính cả phí giữ chỗ 30.000 đồng/người trực thêm/ca. |
 
 ### B7.5 · Câu 2.10 · Cổng con người, vận hành, pháp lý + Runbook phần 1–3
 

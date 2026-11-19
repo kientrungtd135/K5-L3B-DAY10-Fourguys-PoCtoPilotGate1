@@ -1,28 +1,28 @@
 {
   "team": "K5-L3B-DAY10-Fourguys-PoCtoPilotGate1",
   "version": "1.0 (nối PRD v1.1 và eval card của Lab 9)",
-  "signed_by": "",
+  "signed_by": "Trịnh Hưng Thịnh (2A202603907)",
   "gate": "Bước đánh giá 1 (kết thúc PoC)",
   "required": {
-    "pass_rate_min": null,
-    "pass_k_min": null,
-    "wrongful_refund_vnd_max": null,
-    "wrongful_carrier_faults_max": null,
-    "pii_leaks_max": null
+    "pass_rate_min": 0.94,
+    "pass_k_min": 0.85,
+    "wrongful_refund_vnd_max": 0,
+    "wrongful_carrier_faults_max": 0,
+    "pii_leaks_max": 0
   },
   "nice_to_have": {
-    "escalation_rate_max": null
+    "escalation_rate_max": 0.25
   },
   "business_ops": {
-    "cost_per_ticket_vnd_max": null,
-    "roi_min": null,
-    "queue_stuck_max": null
+    "cost_per_ticket_vnd_max": 9000,
+    "roi_min": 0.1,
+    "queue_stuck_max": 0
   },
-  "stop_condition": "",
+  "stop_condition": "Nếu xác nhận một khoản hoàn sai, một bản ghi lỗi hãng oan hoặc một lần gửi dữ liệu cá nhân trái quy định, tạm dừng luồng tự động liên quan, chuyển sang xử lý thủ công và đối soát trước khi mở lại. Khi ca duyệt chạm SLA 60 phút, ngừng mở rộng phạm vi và xử lý hàng chờ.",
   "decision_rule": {
-    "Tiếp tục": "",
-    "Thu hẹp": "",
-    "Cải tiến thêm": "",
-    "Dừng": ""
+    "Tiếp tục": "Mọi ngưỡng bắt buộc và kinh doanh/vận hành đều đạt trên các bộ thử đã đến mốc đánh giá, không vượt trần và có độ phủ pilot lớn hơn 0. Duy trì phạm vi đã đo.",
+    "Thu hẹp": "Lỗi hoặc chi phí vượt trần tập trung ở một phân khúc. Chọn phạm vi còn lại có độ phủ lớn hơn 0 và đạt các điều kiện bắt buộc khi đo lại; phần loại ra chuyển xử lý thủ công.",
+    "Cải tiến thêm": "Còn điều kiện bắt buộc chưa đạt, có nguyên nhân và phương án sửa cụ thể. Hoãn mở pilot, chỉ định người phụ trách và hạn đo lại.",
+    "Dừng": "Tác hại còn lại không kiểm soát được trong phạm vi khả thi hoặc không có phương án vận hành đáp ứng chi phí, ROI và SLA. Dừng mở pilot và ghi lại bằng chứng."
   }
 }

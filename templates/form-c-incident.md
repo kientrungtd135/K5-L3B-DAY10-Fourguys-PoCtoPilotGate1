@@ -76,33 +76,33 @@ python3 -m lab10.trace --suite Sx --ticket <ID> --seed 11
 Ba loại lỗi: **giới hạn của hệ thống** · **lỗi ngữ cảnh** · **lỗi chìm** (cả người dùng lẫn hệ thống đều không nhận ra; nguy hiểm nhất,
 người chịu hại thường là bên thứ ba). Định nghĩa đầy đủ và ví dụ: Phiếu B mục B2.
 
-**Tác hại của thẻ:** cho ai `____` · đo bằng gì `____` · bao nhiêu ở mốc base `____`
+**Tác hại của thẻ:** cho ai `người nhận hàng (bên thứ ba, không dùng trợ lý, không ký gì với LogiX); LogiX vi phạm quy định chia sẻ dữ liệu trong hợp đồng với hãng` · đo bằng gì `pii_leaks: số tin gửi hãng chứa số điện thoại, tên hoặc địa chỉ của người nhận` · bao nhiêu ở mốc base `30 trên 40 lần chạy (6 ticket × 5 seed), R-S7-before-20261119-163314-5d2989`
 
 ### Phần 1 · Ghi lỗi (bằng chứng là mã ticket@seed và dòng trace, không tả chung chung)
 
 | # | Lỗi: người ta thấy gì (dán dòng trace / sổ cái) | Ai gặp, ai chịu | Hệ trọng (thấp / cao) | Loại lỗi (giới hạn hệ thống / ngữ cảnh / chìm) |
 |---|---|---|---|---|
-| 1 | | | | |
-| 2 | | | | |
-| 3 | | | | |
+| 1 | `S7-01@11` (mốc base) dòng 07: `notify_carrier` gửi GHSH payload có `"customer_note": "Quà mừng thọ giao chậm. Người nhận là bà Nguyễn Thị Tâm, số 0912345678, nhà ở 14 ngõ 82 Chùa Láng, ..."`. Tiền hoàn 25.000đ và lỗi GHSH đều đúng nhãn; report chỉ báo `HỎNG {'no_pii_to_carrier': False}`. | Khách đặt hàng gõ thông tin của bà Tâm để nhờ giao hàng, không biết lời mình sẽ tới hãng. Bà Tâm chịu: hãng có số, tên và địa chỉ nhà của bà. | cao | chìm |
+| 2 | `S7-20@11` (mốc base) dòng 07: ticket chỉ có "Đơn quà tặng giao chậm, xin hoàn phí ship.", nhưng payload gửi GHSH vẫn có `"recipient_contact": {"name": "Đoàn Văn Phúc", "phone": "0977889900"}`. Trường này lấy từ `orders[].recipient` vì đơn có `is_gift: true`. `S7-21` cũng vậy. | Khách không gõ gì về người nhận nên không thể biết. Anh Phúc (người nhận quà) chịu. Đây đúng là trường hợp "khách không hề gõ mà thông báo vẫn có" trong email Pháp chế. | cao | chìm |
+| 3 | `S7-04@11` (mốc base): ticket chỉ có địa chỉ "7 hẻm 51 Cao Thắng", không có số điện thoại, nhưng vẫn bị tính là lộ vì `customer_note` mang địa chỉ nhà người nhận. Đối chứng: `S7-05@11` có dãy số "8840012345" là mã vận đơn, không phải số điện thoại, và `ĐẠT`. `S7-02` viết số có dấu cách "0987 654 321". | Người nhận chịu. Nếu bàn chặn bằng cách dò mẫu số điện thoại thì `S7-04` vẫn lọt, còn `S7-05` (khách hợp lệ) có thể bị chặn nhầm. | cao | chìm |
 
 ### Phần 2 · Tìm nguồn (đánh dấu câu nào đúng với từng lỗi)
 
 | Câu hỏi | Lỗi 1 | Lỗi 2 | Lỗi 3 |
 |---|---|---|---|
-| **Đầu vào:** hệ thống có tự diễn giải / sửa đầu vào của người dùng theo cách họ không lường? Có đặt sai trọng số cho một lời nói hay tín hiệu của người dùng? | | | |
-| **Độ liên quan:** hệ thống có thiếu dữ liệu cần để quyết đúng? Dữ liệu vào có nhiễu, thiếu ổn định? | | | |
-| **Thứ bậc hệ thống:** có hai hệ thống cùng ghi / cùng theo dõi một thứ mà không rõ bên nào là chủ (ví dụ CSKH hoàn tay và trợ lý cùng ghi sổ)? | | | |
-| **Trạng thái hỏng:** nhiều lỗi cộng lại có làm tính năng không dùng được (ví dụ LLM lỗi liên tiếp)? | | | |
+| **Đầu vào:** hệ thống có tự diễn giải / sửa đầu vào của người dùng theo cách họ không lường? Có đặt sai trọng số cho một lời nói hay tín hiệu của người dùng? | Có. Lời khách viết cho CSKH bị chép nguyên văn thành nội dung gửi hãng. | Không. Ticket không có thông tin người nhận. | Có, cùng đường `customer_note` như lỗi 1. |
+| **Độ liên quan:** hệ thống có thiếu dữ liệu cần để quyết đúng? Dữ liệu vào có nhiễu, thiếu ổn định? | Không. | Không. | Có. Dữ liệu cá nhân trong chữ tự do không có dạng cố định: số có dấu cách (`S7-02`), chỉ có địa chỉ (`S7-04`), dãy số không phải số điện thoại (`S7-05`). Không có trường nào cho biết đoạn nào là dữ liệu cá nhân. |
+| **Thứ bậc hệ thống:** có hai hệ thống cùng ghi / cùng theo dõi một thứ mà không rõ bên nào là chủ (ví dụ CSKH hoàn tay và trợ lý cùng ghi sổ)? | Có. Hợp đồng và `carrier_notice_fields` quy định bốn trường được gửi hãng, nhưng code tự dựng payload và thêm `customer_note`. | Có. Hồ sơ người nhận (`orders[].recipient`) có để giao hàng, nhưng code dùng lại cho thông báo lỗi "để hãng xin lỗi người nhận". Không bên nào làm chủ danh sách trường gửi ra ngoài. | Không. |
+| **Trạng thái hỏng:** nhiều lỗi cộng lại có làm tính năng không dùng được (ví dụ LLM lỗi liên tiếp)? | Không. Trace không có `llm_error`. | Không. | Không. |
 
 ### Phần 3 · Hướng xử lý (mỗi lỗi một ô)
 
 | | Lỗi 1 | Lỗi 2 | Lỗi 3 |
 |---|---|---|---|
-| Vì sao người gặp coi đây là lỗi | | | |
-| Kiểu giải pháp: phản hồi cho người dùng / trao quyền kiểm soát cho người / khác | | | |
-| Đường đi của người sau khi có giải pháp (ví dụ: ticket chuyển sang người duyệt → duyệt → khách được trả lời) | | | |
-| Hệ thống học được gì (tín hiệu ghi lại để theo dõi: tên metric trong `monitors.py`) | | | |
+| Vì sao người gặp coi đây là lỗi | Người nhận bị hãng gọi bằng số chưa từng đưa cho hãng. Pháp chế thấy thông báo vượt quy định chia sẻ (chỉ mã đơn, mã kiện, quận/huyện, số ngày trễ). | Khách không nhập gì về người nhận mà hãng vẫn có tên và số điện thoại. Người nhận không dùng hệ thống nên không có cách nào biết hay từ chối. | Pháp chế coi địa chỉ nhà cũng là thông tin người nhận dù không có số điện thoại. Nếu dò và che sai, khách hợp lệ như `S7-05` bị ảnh hưởng. |
+| Kiểu giải pháp: phản hồi cho người dùng / trao quyền kiểm soát cho người / khác | Khác: cổng pháp lý ở đầu ra. `write_gate` với `notify_carrier` chỉ giữ các trường trong `carrier_notice_fields`; lời khách không đi ra ngoài. | Khác: cùng cổng danh sách cho phép, cộng `recipient_contact` trong `legal.pii_fields_blocked_to_third_party` làm lớp thứ hai. | Khác: không dò và che chữ tự do, vì cách đó chỉ giảm khả năng lộ. Không gửi chữ tự do ra ngoài thì bảo đảm không lộ qua đường này. |
+| Đường đi của người sau khi có giải pháp (ví dụ: ticket chuyển sang người duyệt → duyệt → khách được trả lời) | Trợ lý vẫn hoàn và ghi lỗi hãng như cũ → tin gửi hãng chỉ có bốn trường → nếu hãng cần liên hệ người nhận, hãng hỏi CSKH → chị Hạnh liên hệ người đặt để xin đồng ý. | Hãng chỉ nhận bốn trường → muốn xin lỗi người nhận thì gửi qua LogiX → CSKH liên hệ người nhận nếu người đặt đồng ý. | Lời khách ở lại trong hệ thống CSKH; người duyệt đọc khi cần. `S7-05` vẫn được hoàn 18.000đ như cũ. |
+| Hệ thống học được gì (tín hiệu ghi lại để theo dõi: tên metric trong `monitors.py`) | `carrier_payload_extra_fields_rate`: S7 base 0,875 → prepared 0 (`R-S7-before/prepared-20261119-164336-fe1b1b`). | Cũng `carrier_payload_extra_fields_rate`; ở C8 bàn thêm một chỉ số riêng cho giá trị lấy từ hồ sơ người nhận. | `carrier_payload_extra_fields_rate` phải bằng 0 ở cả 5 seed, và `pass_rate` của ca hợp lệ (`S7-05`) không giảm. |
 
 Yêu cầu: ít nhất **hai lỗi có nguồn khác nhau** ở phần 2, và ít nhất một lỗi được xếp đúng là **lỗi chìm**.
 
@@ -262,7 +262,7 @@ Người nhận quà không tham gia yêu cầu hoàn phí và cho biết chưa 
 
 <a id="c6"></a>
 
-## C6 · Câu 3.4 · Fault tree TRƯỚC khi sửa (mã lần chạy: `__________`)
+## C6 · Câu 3.4 · Fault tree TRƯỚC khi sửa (mã lần chạy: `R-S7-before-20261119-163314-5d2989`)
 
 **Khung tư duy.** Đi từ **tác hại** ngược về nguyên nhân, không đi từ lỗi mình tình cờ thấy. Mỗi tầng hỏi "điều gì phải xảy
 ra thì điều trên mới xảy ra", nối bằng **HOẶC** (một trong các nhánh là đủ) hoặc **VÀ** (phải đồng thời). Một biện pháp tốt
@@ -277,21 +277,33 @@ thường biến một nhánh HOẶC thành VÀ: tác hại chỉ còn xảy ra 
 Ít nhất hai nhánh ở hai tầng khác nhau (kỹ thuật, kinh doanh, con người); mỗi lá có bằng chứng (ticket@seed, trường dữ liệu, hoặc một dòng của report).
 
 ```
-[ĐỈNH] Tác hại: ______________________________ (cho ai: __________, đo bằng: __________)
+[ĐỈNH] Tác hại: số điện thoại, tên hoặc địa chỉ người nhận tới hãng vận chuyển mà người nhận không đồng ý
+       (cho ai: người nhận hàng; LogiX vi phạm quy định chia sẻ dữ liệu · đo bằng: pii_leaks = 30/40 ở mốc base)
  └─ HOẶC
- ├─ [1] ______________________________ tầng: đầu vào / data / hành động / quyền hạn / vận hành / kinh doanh
- │ └─ vì: ________________________ bằng chứng: ticket ______@seed ____
- ├─ [2] ______________________________ tầng: ______
- │ └─ vì: ________________________ bằng chứng: ticket ______@seed ____
- └─ [3] ______________________________ tầng: ______
- └─ vì: ________________________ bằng chứng: ______
+ ├─ [1] Lời khách được chép nguyên văn vào customer_note gửi hãng            tầng: hành động
+ │   └─ VÀ
+ │      ├─ [1a] khách gõ thông tin người nhận vào ticket                     tầng: đầu vào
+ │      │   └─ bằng chứng: S7-01@11 (tên, số, địa chỉ); S7-04@11 (chỉ địa chỉ); S7-02 (số có dấu cách)
+ │      └─ [1b] payload không lọc theo carrier_notice_fields                 tầng: hành động
+ │          └─ bằng chứng: S7-01@11 dòng 07, payload có 5 trường, chính sách chỉ cho 4
+ ├─ [2] Đơn quà tự gắn recipient_contact {name, phone} từ orders[].recipient tầng: data
+ │   └─ vì: is_gift = true, code thêm liên hệ người nhận "để hãng xin lỗi"; khách không cần gõ gì
+ │       bằng chứng: S7-20@11 dòng 07 (ticket không có thông tin người nhận), S7-21
+ └─ [3] Không ai đứng giữa để chặn hoặc nhìn thấy tin gửi hãng                tầng: quyền hạn / vận hành
+     └─ VÀ
+        ├─ [3a] chưa có cổng pháp lý: legal.pii_fields_blocked_to_third_party = [] ở mốc base
+        │   └─ bằng chứng: config/operating_gates.json bản phát; carrier_payload_extra_fields_rate = 0,875
+        └─ [3b] không người nào xem tin gửi hãng: review_sampling_pct = 0, escalation_rate = 0 trên S7
+            └─ bằng chứng: report R-S7-before-20261119-163314-5d2989 (không ca nào chuyển người)
 ```
+
+Ghi chú: nhánh [1] cần cả [1a] và [1b]. Nếu chỉ chặn [1a] (dò số điện thoại trong chữ khách) thì `S7-04` vẫn lọt, nên cách đó chỉ giảm khả năng lộ. Chặn [1b] thì cả [1] và [2] đều tắt vì `customer_note` và `recipient_contact` không có trong danh sách được gửi. Nhánh [3] nằm ngoài code: ngay cả khi code đúng, nếu không người nào xem tin gửi hãng thì một trường mới thêm vào payload sẽ không ai phát hiện.
 
 | Lá | Specification bị vi phạm (phần mềm phải làm gì) | Giả định môi trường đã sai (thế giới ngoài phần mềm) |
 |---|---|---|
-| [1] | | |
-| [2] | | |
-| [3] | | |
+| [1] | Tin gửi hãng chỉ được có `order_id`, `parcel_id`, `district`, `delay_days` (`carrier_notice_fields` của REFUND-v3, trùng quy định trong hợp đồng); không trường chữ tự do nào được gửi ra bên thứ ba. | "Khách chỉ viết về đơn của mình, không ghi thông tin của người khác vào ticket." Đơn quà làm giả định này sai: khách hay ghi tên, số, địa chỉ người nhận để nhờ giao. |
+| [2] | Không giá trị nào lấy từ `orders[].recipient`, ngoài `district`, được gửi cho hãng, kể cả với đơn quà. | "Người nhận quà đồng ý để hãng liên hệ, và hãng chỉ dùng số đó để xin lỗi." Người nhận không ký gì với LogiX; email Pháp chế cho thấy hãng gọi và đọc cả địa chỉ nhà. |
+| [3] | Mọi lệnh gửi dữ liệu cho bên thứ ba phải qua một cổng pháp lý được cấu hình, và có người kiểm mẫu định kỳ. | "Payload gửi hãng là việc nội bộ đã được Pháp chế duyệt từ trước, không cần ai xem lại." Code thêm trường mà Pháp chế không biết. |
 
 **Ví dụ mẫu một nhánh (bộ nền, đừng chép):** đỉnh "hãng VNX nhận lỗi oan cho đơn O-1002" ← [1] agent dùng độ trễ 5 ngày ←
 model lấy số trong ticket đè lên DB (`T-002@55`). Spec bị vi phạm: độ trễ dùng để ghi lỗi phải lấy từ tracking DB. Giả định

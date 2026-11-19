@@ -4,11 +4,13 @@ Phần TV3 chiếm khoảng 90 giây cuối trong demo 5 phút. Sau khi TV1 chi�
 
 ## Lời thoại
 
-> Trước khi nhận thẻ, nhóm chọn **[v1]** trên bộ nền ở mốc `prepared` **[mã lần chạy B8]**. Chỉ số **[chỉ số]** đạt **[giá trị]** so với ngưỡng đã ký **[ngưỡng]**. Phân khúc cần chú ý nhất là **[kho hoặc hãng]** vì **[chỉ số và giá trị]**.
+> Ở v1, nhóm chọn **Tiếp tục** trong hai kho HN và HCM. Bộ nền ở mốc `prepared` đạt 100% cả theo lần chạy và theo ticket đúng cả năm seed, so với ngưỡng 94% và 85%. Phạm vi đó gồm 13 trên 22 ticket bộ nền.
 >
-> Trên thẻ **[Sx]**, **[chỉ số tác hại]** lần lượt là **[base] → [prepared] → [after]**. Cổng vòng 1 đã **[kết quả có số]**. Sau khi **[đổi cổng, phạm vi hoặc quy trình]**, chi phí là **[x] đồng/ticket** so với **10.000 đồng/ticket làm tay** trong mô phỏng. ROI là **[y]** so với ngưỡng **[z]**. **[Nêu trần hoặc ngưỡng còn vướng, hoặc xác nhận các điều kiện bắt buộc đều đạt theo báo cáo.]**
+> Trên thẻ **S7**, số lần lộ dữ liệu là **30 → 0 → 0**. VNX có 15 lần ở `base`, giảm còn 0 ở `after` trong phạm vi đã đo. Cổng vòng 1 đã chặn các trường ngoài danh sách. Vòng 2 giữ cổng và bổ sung hai monitor để theo dõi thông tin liên hệ trong ticket và trong payload gửi hãng. Ở `after`, chi phí là **6.434 đồng/ticket** so với **10.000 đồng làm tay**, ROI **55%** so với ngưỡng **10%**, và **0 ca ùn**.
 >
-> Nhóm **[giữ/đổi]** quyết định thành **[v2]** vì **[con số quyết định và dòng `decision_rule`]**. **[Nêu phạm vi pilot và luồng xử lý phần nằm ngoài phạm vi, hoặc việc cần làm và hạn xem xét lại.]** Nếu có pilot thật, nhóm sẽ đo lại **[một chỉ số cụ thể]** vì **[giả định trong dữ liệu mô phỏng có thể sai]**.
+> V2 giữ **Tiếp tục** vì các ngưỡng đã ký đều đạt và báo cáo không còn vượt trần. Hai kho HN/HCM bao phủ 6 trên 8 ticket S7 với một người duyệt trực. Hai ticket còn lại chuyển xử lý thủ công. Trước Gate 2, nhóm sẽ đối soát payload ở cả đầu gửi và đầu nhận, vì hệ thống trung gian của hãng có thể xử lý các trường khác với mô phỏng.
+
+Bằng chứng v1: `R-base-prepared-20261119-161437-fe1b1b`. Bằng chứng v2: `R-S7-grade-20261119-170259-5993e2` (`PASS-VISIBLE`).
 
 ## Số liệu cần đặt cạnh nhau trên màn hình
 

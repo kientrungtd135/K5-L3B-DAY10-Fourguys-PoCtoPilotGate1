@@ -440,31 +440,29 @@ Quyết định phải khớp bằng chứng và khớp tiêu chí đã ký. Ch�
 chưa đạt, là quyết định không đạt. **Thu hẹp**, **Cải tiến thêm**, **Dừng** có lý do và có số thì đều là quyết định đạt.
 Cột v1 nằm ở Phiếu B mục B8; không sửa cột đó.
 
-**Bản làm việc của TV3.** Bằng chứng dưới đây lấy từ lần grade trước sửa đã ghi ở C0/C1. Mốc `after` của lần chạy đó dùng cùng cổng với `prepared`. Chốt v2 khi TV1 cung cấp kết quả sau khi hoàn tất vòng 2.
+**Kết luận TV3:** Giữ quyết định **Tiếp tục** trong phạm vi HN/HCM với một người duyệt trực. Kết quả được xác minh lại trên cấu hình hiện tại sau khi bổ sung hai monitor ở C8.
 
 | | **v2** (phút 185–200, SAU sự cố) |
 |---|---|
 | Commit ký tiêu chí | `19a1d0b`, giống v1. |
 | Hash chốt cổng vòng 1 | `bfb563a4`, giống v1. |
-| Mã lần chạy dùng làm bằng chứng | S7 `base`: `R-S7-before-20261119-163314-5d2989` · `prepared`: `R-S7-prepared-20261119-163314-5d2989` · chờ mã `after` chính thức của vòng 2. |
-| Còn dòng "vượt trần" nào trong report? (hàng chờ, chi phí, ROI, trần tiền, pháp lý) | `prepared` không vượt trần. Cần đối chiếu lại `after` trên S7 và bộ nền. |
-| Kho hoặc hãng có số xấu nhất. Nếu chỉ nhìn phân khúc này, quyết định có đổi không? | VNX ở `base` có 15 lần lộ PII, giảm còn 0 ở `prepared` trong phạm vi đã đo. Chỉ nhìn VNX ở `base` thì phải Cải tiến thêm. Đối chiếu phân khúc xấu nhất ở `after` trước khi chốt. |
-| Quyết định (khoanh một) | Tiếp tục · Thu hẹp · Cải tiến thêm · Dừng |
-| Bằng chứng 1: mã lần chạy + chỉ số bắt buộc nào đạt / chưa | `R-S7-before-20261119-163314-5d2989` → `R-S7-prepared-20261119-163314-5d2989`: PII 30 → 0; hoàn sai và lỗi hãng oan đều 0 ở cả hai mốc. |
-| Bằng chứng 2 | `R-S7-prepared-20261119-163314-5d2989`: `pass_rate` và `pass^k` cùng đạt 100%, so với ngưỡng 94% và 85%. Độ phủ trên S7 là 75%. |
-| Bằng chứng 3 | `R-S7-prepared-20261119-163314-5d2989`: 6.434 đồng/ticket ≤ 9.000 đồng, ROI 55% ≥ 10%, 0 ca ùn; tổng hoàn tự động 25.000 đồng/ngày dưới trần 1,8 triệu. |
-| Khớp dòng nào trong `decision_rule` đã ký? | |
-| Nếu Thu hẹp: cắt kho nào / còn bao nhiêu phần trăm / mấy người trực, và ticket bị cắt đi đâu | |
-| Nếu Cải tiến thêm: giả thuyết cụ thể (nhánh nào của fault tree) + hạn | |
-| Nếu Dừng: bài học ghi lại | |
-| Ngày quyết định lại (trừ khi Dừng) | |
-| PIC ký | |
+| Mã lần chạy dùng làm bằng chứng | S7 `base`: `R-S7-before-20261119-170259-5993e2` · `prepared`: `R-S7-prepared-20261119-170259-5993e2` · `after`: `R-S7-after-20261119-170259-5993e2`. |
+| Còn dòng "vượt trần" nào trong report? (hàng chờ, chi phí, ROI, trần tiền, pháp lý) | Báo cáo `after` không còn vượt trần trên S7 và bộ nền. |
+| Kho hoặc hãng có số xấu nhất. Nếu chỉ nhìn phân khúc này, quyết định có đổi không? | VNX có 15 lần lộ PII ở `base`, còn 0 ở `prepared` và `after` trong phạm vi đã đo. HN có chi phí cao nhất trong hai kho S7 được giữ ở `after` (2.102 đồng/ticket ở bảng theo kho, chưa phân bổ chi phí dùng chung), đạt 100% và có 0 lần lộ. Giữ quyết định khi xét các phân khúc này ở `after`. |
+| Quyết định | **Tiếp tục** trong HN/HCM, giữ một người trực; 2/8 ticket S7 ngoài phạm vi tiếp tục xử lý thủ công. |
+| Bằng chứng 1: mã lần chạy + chỉ số bắt buộc nào đạt / chưa | Ba mốc của `R-S7-grade-20261119-170259-5993e2`: PII **30 → 0 → 0**, hoàn sai và lỗi hãng oan đều 0 trên S7. |
+| Bằng chứng 2 | `R-S7-after-20261119-170259-5993e2`: `pass_rate` và `pass^k` đều 100%, so với 94% và 85%. Độ phủ S7 75%; báo cáo cũng xác nhận không có ca hồi quy mới trên bộ nền. |
+| Bằng chứng 3 | `R-S7-after-20261119-170259-5993e2`: 6.434 đồng/ticket ≤ 9.000 đồng, ROI 55% ≥ 10%, 0 ca ùn; hoàn tự động 25.000 đồng/ngày dưới trần 1,8 triệu. |
+| Khớp dòng nào trong `decision_rule` đã ký? | **Tiếp tục**: đạt các ngưỡng bắt buộc và kinh doanh/vận hành, không vượt trần, có độ phủ dương. |
+| Nếu Thu hẹp / Cải tiến thêm / Dừng | Không áp dụng cho quyết định này. |
+| Ngày quyết định lại (trừ khi Dừng) | 30/11/2026, trước khi `REFUND-v4` có hiệu lực. Xem lại sớm nếu điều kiện dừng kích hoạt. |
+| PIC ký | Trịnh Hưng Thịnh (TV3). |
 
 **Chỉ ở v2**
-- Quyết định đổi hay giữ so với v1? Vì con số nào: …
-- Report tự kiểm tra: mã lần chạy `__________` · ô nào còn đỏ (nguyên nhân × tầng): …
+- Giữ **Tiếp tục** so với v1 vì `after` giữ 0 lần lộ PII trên S7, ROI 55% và không có ca ùn. Vòng 2 thêm giám sát: tỷ lệ ticket có dấu hiệu liên hệ trong văn bản là 50% trên S7 `after` so với 0% trên bộ nền, còn tỷ lệ payload hãng có dấu hiệu liên hệ là 0% trên S7 `after`.
+- `R-S7-grade-20261119-170259-5993e2` đạt `PASS-VISIBLE`. Không có mục đỏ trong các kiểm tra đã chạy; máy chưa có test ẩn.
 - Cổng vòng 1 đã loại trường dư trong thông báo hãng trên các ca S7 được xử lý, đưa chỉ số PII từ 30 xuống 0. Phép đo còn giới hạn ở phạm vi pilot và chưa thử dữ liệu cá nhân bị gán nhầm vào giá trị của một trường được phép.
-- Report ghi "được phép cân nhắc Tiếp tục" hay "không đủ căn cứ"? Quyết định của bàn có khớp không: …
+- Report ghi “Được phép cân nhắc ‘Tiếp tục’”, phù hợp với v2 trong phạm vi đã đo.
 - Bộ thử chưa xác nhận mọi hệ thống hãng nhận đúng bốn trường sau các bước chuyển tiếp. Trong pilot, cần đối soát mẫu payload ở đầu gửi và đầu nhận trước khi mở rộng.
 
 **Ba dòng bắt buộc** (chép nguyên ba câu này sang `submission/submission.json`, mục `three_lines`)

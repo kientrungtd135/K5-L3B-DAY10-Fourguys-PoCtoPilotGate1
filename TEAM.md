@@ -72,11 +72,11 @@ Soạn mục tiêu cấp hệ thống, ngưỡng và quy tắc quyết định G
 
 ### Bằng chứng
 
-A1/A4 của Phiếu A; B3, lăng kính kinh doanh B6 và cơ sở chọn số B7.4 của Phiếu B; `demo-tv3.md`. Mã lần chạy sẽ bổ sung vào B8 và C12 khi có báo cáo.
+A1/A4 của Phiếu A; B3, B6 kinh doanh, B7.4/B8 của Phiếu B; C3.3/C5/C12 của Phiếu C; `demo-tv3.md`. V1 dựa trên `R-base-prepared-20261119-161437-fe1b1b`, v2 dựa trên `R-S7-grade-20261119-170259-5993e2`.
 
 ### Exit ticket
 
-Gợi ý để TV3 tự xác nhận sau lab: chi phí thấp mỗi lần gọi mô hình chưa bảo đảm pilot tiết kiệm; cần kiểm tra thêm chi phí chuyển duyệt giờ cao điểm và mức độ các số mô phỏng phản ánh tải thật.
+Điều rút ra: cần đọc chi phí toàn luồng cùng độ phủ và tải duyệt trước khi mở pilot. Điều còn cần kiểm tra: tải duyệt giờ cao điểm và payload các hãng thực nhận có giống mô phỏng hay không.
 
 ## LuuNguyenChiDuc-2A202603923
 

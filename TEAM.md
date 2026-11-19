@@ -2,9 +2,9 @@
 
 ## Thông tin nhóm
 
-- Tên nhóm (`TenNhom`, không dấu, không khoảng trắng):
-- Lớp: `L3A` / `L3B`
-- Repo của bàn: `K5-<L3A|L3B>-DAY10-<TenNhom>-PoCtoPilotGate1`
+- Tên nhóm (`TenNhom`, không dấu, không khoảng trắng): `Fourguys`
+- Lớp: `L3B`
+- Repo của bàn: `K5-L3B-DAY10-Fourguys-PoCtoPilotGate1`
 - Thẻ sự cố đã bốc (S1–S8):
 
 ## Thành viên
@@ -13,10 +13,10 @@ Họ tên đầy đủ và MSSV của **mọi** thành viên; bàn 3 người th
 
 | STT | Họ và tên | MSSV | Vai | Trưởng nhóm |
 | --: | --------- | ---- | --- | :---------: |
-|   1 |           |      |     |             |
-|   2 |           |      |     |             |
-|   3 |           |      |     |             |
-|   4 |           |      |     |             |
+|   1 | Trần Đức Trung | 2A202603938 | Kỹ sư cổng (trưởng nhóm) | Có |
+|   2 | Dương Minh Chiến | 2A202603921 | Kỹ sư cổng (trace, test, chỉ số theo dõi) | Không |
+|   3 | Trịnh Hưng Thịnh | 2A202603907 | Sản phẩm và kinh doanh | Không |
+|   4 | Lưu Nguyễn Chí Đức | 2A202603923 | Vận hành và pháp lý | Không |
 
 Ghi `members` trong `submission/submission.json` theo dạng `"HoVaTen-MSSV"`, khớp bảng trên.
 
@@ -24,20 +24,74 @@ Ghi `members` trong `submission/submission.json` theo dạng `"HoVaTen-MSSV"`, k
 
 Mỗi thành viên tự viết một mục bên dưới (chép mẫu, đổi tiêu đề thành họ tên không dấu và MSSV, ví dụ `## NguyenVanAn-20241234`).
 
-## HoVaTen-MSSV
+## TranDucTrung-2A202603938
 
 ### Phần việc phụ trách
 
-Vai trong bàn; câu nào của đề, mục nào của phiếu A/B/C, file nào (`lab10/guards.py`, `config/operating_gates.json`, …).
+Kỹ sư cổng, trưởng nhóm; phụ trách `lab10/guards.py`, Git và các lệnh eval/gate/checkpoint/grade; các mục được giao trong phiếu A/B/C.
 
 ### Đóng góp cụ thể
 
-...
+Điền sau khi hoàn thành.
 
 ### Bằng chứng
 
-Mã commit, mã lần chạy (`runs/<mã>`), dòng trong phiếu.
+Điền mã commit, mã lần chạy (`runs/<mã>`) và mục phiếu sau khi hoàn thành.
 
 ### Exit ticket
 
-Một điều học được, một điều còn chưa chắc.
+Điền sau buổi lab.
+
+## DuongMinhChien-2A202603921
+
+### Phần việc phụ trách
+
+Kỹ sư cổng (trace, test, chỉ số theo dõi); phụ trách `lab10/monitors.py` và các mục được giao trong phiếu A/B/C.
+
+### Đóng góp cụ thể
+
+Điền sau khi hoàn thành.
+
+### Bằng chứng
+
+Điền mã commit, mã lần chạy (`runs/<mã>`) và mục phiếu sau khi hoàn thành.
+
+### Exit ticket
+
+Điền sau buổi lab.
+
+## TrinhHungThinh-2A202603907
+
+### Phần việc phụ trách
+
+Sản phẩm và kinh doanh; phụ trách `config/acceptance_criteria.json`, mục `business` trong `config/operating_gates.json` và các mục được giao trong phiếu A/B/C.
+
+### Đóng góp cụ thể
+
+Điền sau khi hoàn thành.
+
+### Bằng chứng
+
+Điền mã commit, mã lần chạy (`runs/<mã>`) và mục phiếu sau khi hoàn thành.
+
+### Exit ticket
+
+Điền sau buổi lab.
+
+## LuuNguyenChiDuc-2A202603923
+
+### Phần việc phụ trách
+
+Vận hành và pháp lý; phụ trách các mục `operations` và `legal` trong `config/operating_gates.json`, `submission/submission.json`, bảng thành viên trong `TEAM.md` và các mục được giao trong phiếu A/B/C.
+
+### Đóng góp cụ thể
+
+Điền sau khi hoàn thành.
+
+### Bằng chứng
+
+Điền mã commit, mã lần chạy (`runs/<mã>`) và mục phiếu sau khi hoàn thành.
+
+### Exit ticket
+
+Điền sau buổi lab.

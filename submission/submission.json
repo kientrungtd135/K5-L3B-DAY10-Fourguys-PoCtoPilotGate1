@@ -10,8 +10,8 @@
   "decision_v1": "Tiếp tục",
   "decision_v2": "Tiếp tục",
   "three_lines": {
-    "environment_assumption": "Giả định mỗi hãng nhận và xử lý thông báo lỗi theo đúng hợp đồng bốn trường, kể cả khi thông báo đi qua hệ thống trung gian.",
+    "environment_assumption": "Giả định mỗi hãng nhận và xử lý thông báo lỗi chỉ theo đúng hợp đồng 4 trường (`order_id`, `parcel_id`, `district`, `delay_days`), kể cả khi thông báo đi qua hệ thống trung gian.",
     "reduce_or_prevent": "Cổng vòng 1 ngăn gửi trường ngoài allowlist qua `notify_carrier` trên các ca S7 đã đo; số lần lộ PII giảm từ 30 xuống 0 ở `prepared`. Cần xác minh cả giá trị của trường hợp lệ và các kênh chuyển tiếp khi chạy thật.",
-    "measure_in_pilot": "Trước Gate 2, đối soát mẫu payload thông báo đơn quà ở đầu gửi và đầu nhận theo hãng, đo số thông báo có trường ngoài hợp đồng hoặc chứa PII và tạm dừng luồng liên quan khi xác nhận có một lần lộ."
+    "measure_in_pilot": "Trước Gate 2, đối soát mẫu payload thông báo đơn quà ở đầu gửi và đầu nhận theo từng hãng (VNX, GHSH, DNB là 3 hãng bị lộ ở mốc base S7), đếm số thông báo có trường ngoài 4 trường hợp đồng hoặc chứa PII (mục tiêu 0) và tạm dừng luồng liên quan khi xác nhận có một lần lộ."
   }
 }

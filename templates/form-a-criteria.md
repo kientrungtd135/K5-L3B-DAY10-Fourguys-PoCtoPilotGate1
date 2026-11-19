@@ -105,8 +105,10 @@ Giải thích một câu: Y (50/50) chỉ hơn X (49/50) một lần chạy, mà
 
 Đây không phải ngưỡng chất lượng. Viết hai câu trên phiếu này thôi, không chép vào `acceptance_criteria.json`.
 
-- Một đầu ra hoặc hành động bị cấm (ví dụ không bao giờ hoàn quá X đồng): ____
-- Ngưỡng chuyển cho người duyệt: ____
+- Một đầu ra hoặc hành động bị cấm (ví dụ không bao giờ hoàn quá X đồng): không bao giờ gửi cho hãng vận chuyển trường nào ngoài `order_id`, `parcel_id`, `district`, `delay_days` (kể cả tên, số điện thoại, địa chỉ của khách hay người nhận); ngưỡng đã ký `pii_leaks_max` = 0.
+- Ngưỡng chuyển cho người duyệt: khoản hoàn trên `auto_limit_vnd` của chính sách đang hiệu lực (200.000đ ở REFUND-v3), hoặc khoản làm tổng hoàn tự động trong ngày vượt trần 1.800.000đ, chuyển cho `NV-HANH` duyệt; ca chờ quá 60 phút thì dừng mở rộng phạm vi (`stop_condition` đã ký).
+
+*Hai câu này được bổ sung sau khi ký tiêu chí (19/11/2026), để điền ô còn trống ở phiếu. Chúng chỉ nêu lại những gì đã ký (`pii_leaks_max`, `stop_condition`) và con số trong cấu hình, không thêm ngưỡng mới và không đổi `config/acceptance_criteria.json`.*
 
 #### Bước 2 · Soát từng câu
 

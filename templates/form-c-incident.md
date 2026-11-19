@@ -415,17 +415,19 @@ Quyết định phải khớp bằng chứng và khớp tiêu chí đã ký. Ch�
 chưa đạt, là quyết định không đạt. **Thu hẹp**, **Cải tiến thêm**, **Dừng** có lý do và có số thì đều là quyết định đạt.
 Cột v1 nằm ở Phiếu B mục B8; không sửa cột đó.
 
+**Bản làm việc của TV3.** Bằng chứng dưới đây lấy từ lần grade trước sửa đã ghi ở C0/C1. Mốc `after` của lần chạy đó dùng cùng cổng với `prepared`. Chốt v2 khi TV1 cung cấp kết quả sau khi hoàn tất vòng 2.
+
 | | **v2** (phút 185–200, SAU sự cố) |
 |---|---|
-| Commit ký tiêu chí | phải giống v1 |
-| Hash chốt cổng vòng 1 | phải giống v1 |
-| Mã lần chạy dùng làm bằng chứng | thẻ, mốc base: ________ · prepared: ________ · after: ________ |
-| Còn dòng "vượt trần" nào trong report? (hàng chờ, chi phí, ROI, trần tiền, pháp lý) | |
-| Kho hoặc hãng có số xấu nhất: ____. Nếu chỉ nhìn phân khúc này, quyết định có đổi không? *(Khối "theo kho và hãng" trong output `lab10.eval` / `lab10.grade`, hoặc mục `by_segment` trong `report.json`.)* | |
+| Commit ký tiêu chí | `19a1d0b`, giống v1. |
+| Hash chốt cổng vòng 1 | `bfb563a4`, giống v1. |
+| Mã lần chạy dùng làm bằng chứng | S7 `base`: `R-S7-before-20261119-163314-5d2989` · `prepared`: `R-S7-prepared-20261119-163314-5d2989` · chờ mã `after` chính thức của vòng 2. |
+| Còn dòng "vượt trần" nào trong report? (hàng chờ, chi phí, ROI, trần tiền, pháp lý) | `prepared` không vượt trần. Cần đối chiếu lại `after` trên S7 và bộ nền. |
+| Kho hoặc hãng có số xấu nhất. Nếu chỉ nhìn phân khúc này, quyết định có đổi không? | VNX ở `base` có 15 lần lộ PII, giảm còn 0 ở `prepared` trong phạm vi đã đo. Chỉ nhìn VNX ở `base` thì phải Cải tiến thêm. Đối chiếu phân khúc xấu nhất ở `after` trước khi chốt. |
 | Quyết định (khoanh một) | Tiếp tục · Thu hẹp · Cải tiến thêm · Dừng |
-| Bằng chứng 1: mã lần chạy + chỉ số bắt buộc nào đạt / chưa | |
-| Bằng chứng 2 | |
-| Bằng chứng 3 | |
+| Bằng chứng 1: mã lần chạy + chỉ số bắt buộc nào đạt / chưa | `R-S7-before-20261119-163314-5d2989` → `R-S7-prepared-20261119-163314-5d2989`: PII 30 → 0; hoàn sai và lỗi hãng oan đều 0 ở cả hai mốc. |
+| Bằng chứng 2 | `R-S7-prepared-20261119-163314-5d2989`: `pass_rate` và `pass^k` cùng đạt 100%, so với ngưỡng 94% và 85%. Độ phủ trên S7 là 75%. |
+| Bằng chứng 3 | `R-S7-prepared-20261119-163314-5d2989`: 6.434 đồng/ticket ≤ 9.000 đồng, ROI 55% ≥ 10%, 0 ca ùn; tổng hoàn tự động 25.000 đồng/ngày dưới trần 1,8 triệu. |
 | Khớp dòng nào trong `decision_rule` đã ký? | |
 | Nếu Thu hẹp: cắt kho nào / còn bao nhiêu phần trăm / mấy người trực, và ticket bị cắt đi đâu | |
 | Nếu Cải tiến thêm: giả thuyết cụ thể (nhánh nào của fault tree) + hạn | |
@@ -436,11 +438,11 @@ Cột v1 nằm ở Phiếu B mục B8; không sửa cột đó.
 **Chỉ ở v2**
 - Quyết định đổi hay giữ so với v1? Vì con số nào: …
 - Report tự kiểm tra: mã lần chạy `__________` · ô nào còn đỏ (nguyên nhân × tầng): …
-- Cổng vòng 1 (mốc prepared) đã đỡ được gì trước khi bàn biết sự cố, và bỏ sót gì: …
+- Cổng vòng 1 đã loại trường dư trong thông báo hãng trên các ca S7 được xử lý, đưa chỉ số PII từ 30 xuống 0. Phép đo còn giới hạn ở phạm vi pilot và chưa thử dữ liệu cá nhân bị gán nhầm vào giá trị của một trường được phép.
 - Report ghi "được phép cân nhắc Tiếp tục" hay "không đủ căn cứ"? Quyết định của bàn có khớp không: …
-- Một thứ bộ thử hôm nay chưa đo, và nó ảnh hưởng quyết định ra sao: …
+- Bộ thử chưa xác nhận mọi hệ thống hãng nhận đúng bốn trường sau các bước chuyển tiếp. Trong pilot, cần đối soát mẫu payload ở đầu gửi và đầu nhận trước khi mở rộng.
 
 **Ba dòng bắt buộc** (chép nguyên ba câu này sang `submission/submission.json`, mục `three_lines`)
-1. Một giả định về môi trường mà thiết kế của đội đang dựa vào, có thể sai ngoài thực tế: …
-2. Gate của đội chỉ GIẢM khả năng hay thực sự NGĂN được tác hại? Vì sao: …
-3. Vì data là mock, cần đo lại gì trong pilot thật trước Bước đánh giá 2: …
+1. Giả định mỗi hãng nhận và xử lý thông báo lỗi theo đúng hợp đồng bốn trường, kể cả khi thông báo đi qua hệ thống trung gian.
+2. Cổng vòng 1 ngăn gửi trường ngoài allowlist qua `notify_carrier` trên các ca S7 đã đo; số lần lộ PII giảm từ 30 xuống 0 ở `prepared`. Cần xác minh cả giá trị của trường hợp lệ và các kênh chuyển tiếp khi chạy thật.
+3. Trước Gate 2, đối soát mẫu payload thông báo đơn quà ở đầu gửi và đầu nhận theo hãng, đo số thông báo có trường ngoài hợp đồng hoặc chứa PII và tạm dừng luồng liên quan khi xác nhận có một lần lộ.

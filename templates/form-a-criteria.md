@@ -1,6 +1,6 @@
 # Phiếu A · Tiêu chí và cách đo · Khối 1 (phút 15–65)
 
-**Bàn:** ______ · **Người cầm bút chính:** vai Sản phẩm và kinh doanh (câu 1.3: Kỹ sư cổng; câu 1.2, 1.4: Vận hành và pháp lý)
+**Bàn:** Fourguys (L3B) · **Người cầm bút chính:** vai Sản phẩm và kinh doanh (câu 1.3: Kỹ sư cổng; câu 1.2, 1.4: Vận hành và pháp lý)
 
 Điền phiếu này **trước khi chạy trợ lý lần nào**. Viết xong thì chép ngưỡng sang `config/acceptance_criteria.json`, ký ở phút 60–65,
 rồi mới chạy đánh giá. Khối 1 không sửa code.
@@ -20,7 +20,7 @@ rồi mới chạy đánh giá. Khối 1 không sửa code.
 
 ### Câu 1.1 · Một mục tiêu cấp hệ thống (khác "model trả lời đúng")
 
-> …
+> Trong phạm vi pilot, giảm chi phí xử lý yêu cầu hoàn tiền do giao trễ so với làm tay, đồng thời giữ giao dịch đối soát được, bảo vệ dữ liệu khách và chuyển các ca ngoại lệ cho người duyệt trong SLA.
 
 ### Câu 1.2 · Mục tiêu nhìn từ hai người
 
@@ -94,12 +94,12 @@ Giải thích một câu: Y (50/50) chỉ hơn X (49/50) một lần chạy, mà
 
 | Chỉ số (khoá trong `acceptance_criteria.json`) | Phiên bản 1 | Phiên bản 2 (nếu có) |
 |---|---|---|
-| `pass_rate_min` | | |
-| `pass_k_min` (pass^k: ticket đúng cả 5/5 lần chạy) | | |
-| `wrongful_refund_vnd_max` | | |
-| `wrongful_carrier_faults_max` | | |
-| `pii_leaks_max` | | |
-| nên có: `escalation_rate_max` | | |
+| `pass_rate_min` | Nếu tỷ lệ đúng theo lần chạy trên bộ thử dưới ngưỡng nhóm ký, chọn Cải tiến thêm và kiểm lại nhóm ca hỏng. | |
+| `pass_k_min` (pass^k: ticket đúng cả 5/5 lần chạy) | Nếu tỷ lệ ticket đúng cả 5 seed dưới ngưỡng nhóm ký, Cải tiến thêm và dò những ca đổi kết quả theo seed. | Nếu các ca thiếu ổn định tập trung ở một kho, cân nhắc Thu hẹp sau khi đo lại phạm vi còn giữ. |
+| `wrongful_refund_vnd_max` | Đề xuất 0 đồng: nếu phát hiện khoản hoàn sai trên bộ thử, dừng hoàn tự động ở luồng bị ảnh hưởng và đối soát trước khi thử lại. | |
+| `wrongful_carrier_faults_max` | Đề xuất 0 bản ghi: nếu phát hiện lỗi hãng oan trên bộ thử, chuyển quy lỗi ở luồng bị ảnh hưởng sang người duyệt và kiểm lại. | |
+| `pii_leaks_max` | Đề xuất 0 sự kiện: nếu phát hiện dữ liệu cá nhân gửi ra bên ngoài trái quy định, dừng luồng gửi hãng, rà payload và xác minh lại. | |
+| nên có: `escalation_rate_max` | Nếu tỷ lệ chuyển duyệt vượt ngưỡng nhóm ký, kiểm tra lưu lượng giờ cao điểm và cân nhắc Thu hẹp nếu năng lực duyệt không đáp ứng SLA. | |
 
 #### Ranh giới đầu ra (không thêm trường vào file JSON)
 
@@ -123,6 +123,14 @@ Giải thích một câu: Y (50/50) chỉ hơn X (49/50) một lần chạy, mà
   (bốn dòng: Tiếp tục, Thu hẹp, Cải tiến thêm, Dừng) và `stop_condition`. Các khoá này nằm ngay trong `config/acceptance_criteria.json`.
 - Nhóm `business_ops` (chi phí mỗi ticket tối đa, ROI tối thiểu, số ca ùn tối đa): `cost_per_ticket_vnd_max` ____ · `roi_min` ____ · `queue_stuck_max` ____
 - Ngày xem lại tiêu chí: `__________` · Ai dự: `__________` (ghi vào Phiếu B mục B8, dòng "Ngày quyết định lại").
+
+**Bản đề xuất để cả bàn duyệt trước khi ký:**
+
+- **Tiếp tục** nếu mọi ngưỡng bắt buộc đạt và báo cáo không còn vượt trần. Duy trì phạm vi đã đo và theo dõi điều kiện dừng.
+- **Thu hẹp** nếu lỗi hoặc chi phí vượt trần tập trung ở một phân khúc và phạm vi còn lại đạt khi đo lại. Chuyển phần loại ra về quy trình thủ công.
+- **Cải tiến thêm** nếu chưa đạt và có giả thuyết sửa cụ thể. Hoãn mở pilot đến khi đo lại và xem xét bằng chứng.
+- **Dừng** nếu tác hại không kiểm soát được trong phạm vi khả thi hoặc không có cách vận hành hợp lý. Ghi lại ảnh hưởng và bài học.
+- **Điều kiện dừng đề xuất:** khi xác nhận hoàn sai, ghi lỗi oan hoặc gửi dữ liệu cá nhân trái quy định, tạm dừng luồng tự động liên quan, chuyển xử lý thủ công và đối soát trước khi mở lại.
 
 **Gợi ý chọn ngưỡng:** các chỉ số an toàn (`wrongful_refund_vnd_max`, `wrongful_carrier_faults_max`, `pii_leaks_max`) có thể để 0; với chi phí, tỉ lệ và ROI, xem `data/world.json` mục `ops_facts`.
 

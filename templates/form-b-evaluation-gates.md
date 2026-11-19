@@ -120,24 +120,20 @@ Gợi ý: mở `data/world.json` phần `policies`, `orders[].parcels`, `ops_lim
 
 | Mục | Điền cho trợ lý hoàn tiền |
 |---|---|
-| Người dùng | |
-| Việc người dùng cần làm xong | |
-| Đầu ra của hệ thống (kể cả các lệnh ghi) | |
-| Dữ liệu trợ lý đọc lúc chạy (bảng nào trong `data/world.json`) | |
-| Trường then chốt quyết định tiền và lỗi hãng | |
-| Với mỗi trường then chốt: **nguồn sự thật** hay **bản sao** (ai cập nhật, khi nào)? | |
-| Định dạng cần để ý (ngày, trường được phép trống, đơn nhiều kiện) | |
-| Thế giới thật làm dữ liệu lệch ở đâu (theo mùa, đổi chính sách, giờ cao điểm, người nhập tay)? | |
-| Câu người ngoài sẽ hỏi về nguồn dữ liệu ("sao hệ thống biết đơn trễ mấy ngày?") | |
+| Người dùng | Khách yêu cầu hoàn phí, CSKH duyệt ngoại lệ, kế toán và hãng đối soát các bản ghi. |
+| Việc người dùng cần làm xong | Xác minh trễ, quyết định khoản hoàn và bên chịu phí, quy lỗi đúng kiện, phản hồi cho khách hoặc chuyển duyệt. |
+| Đầu ra của hệ thống (kể cả các lệnh ghi) | Giao dịch hoàn tiền, bản ghi lỗi hãng, thông báo cho hãng, phản hồi cho khách; ca ngoại lệ được chuyển duyệt. |
+| Dữ liệu trợ lý đọc lúc chạy (bảng nào trong `data/world.json`) | Đơn và kiện trong `orders`, `policies`, phê duyệt và thông tin liên quan đến khách/hãng; sổ cái và bản ghi lỗi để đối chiếu các lần ghi trước đó. |
+| Trường then chốt quyết định tiền và lỗi hãng | Phí vận chuyển, ngày hẹn/ngày giao, nguyên nhân đã ghi nhận, mã kiện/hãng, phiên bản chính sách theo ngày, phê duyệt gắn với đơn hoặc khách. |
+| Với mỗi trường then chốt: **nguồn sự thật** hay **bản sao** (ai cập nhật, khi nào)? | Hệ thống đơn hàng ghi phí và ngày hẹn lúc chốt đơn; tracking cập nhật ngày giao, kiện, hãng và nguyên nhân trong quá trình xử lý; chính sách do chủ chính sách ban hành cùng khoảng hiệu lực; phê duyệt do người có thẩm quyền ghi khi duyệt. Văn bản khách và cờ `index_active` là tín hiệu để đối chiếu. |
+| Định dạng cần để ý (ngày, trường được phép trống, đơn nhiều kiện) | Dùng ngày `YYYY-MM-DD`; kiểm tra trường ngày giao hoặc nguyên nhân còn thiếu; đối chiếu theo mã kiện khi một đơn có nhiều kiện hoặc nhiều hãng. |
+| Thế giới thật làm dữ liệu lệch ở đâu (theo mùa, đổi chính sách, giờ cao điểm, người nhập tay)? | Sau khi đổi chính sách, bản chỉ mục có thể cập nhật chậm hơn ngày hiệu lực. Giờ cao điểm có thể làm tracking và nguyên nhân trễ được nhập muộn. |
+| Câu người ngoài sẽ hỏi về nguồn dữ liệu ("sao hệ thống biết đơn trễ mấy ngày?") | Ngày hẹn và ngày giao lấy từ đâu, và khi nhiều kiện giao khác ngày thì quyết định dựa trên kiện nào? |
 
 **Tóm lại (điền vào chỗ trống):**
-Trợ lý dùng `__________`, `__________`, `__________` để giúp `__________` làm được `__________`.
-Trường mà nếu sai thì tiền hoặc lỗi hãng sai theo: `__________`, `__________`.
-Chúng tôi biết thế giới thật sẽ làm dữ liệu lệch ở: `__________`. Dấu hiệu nhìn thấy sớm nhất: `__________`.
+Trợ lý dùng đơn/kiện, chính sách và phê duyệt để giúp khách và CSKH xử lý yêu cầu hoàn phí. Ngày giao và phiên bản chính sách ảnh hưởng trực tiếp đến tiền hoàn; nguyên nhân và mã kiện ảnh hưởng đến quy lỗi hãng. Dấu hiệu sớm của độ lệch là mã chính sách trong trace không khớp ngày hiệu lực.
 
-**Ví dụ drift trong 3 tháng tới** (lấy từ dòng "thế giới thật làm dữ liệu lệch"): cái gì đổi `____` · đổi ngày nào `____` ·
-trường nào cho thấy `____` · con số nào của Bản tiêu chí bị ảnh hưởng `____`.
-Đây là đầu vào đổi hay quan hệ vào–ra đổi? Chỉ số nào sẽ phát hiện? `__________`
+**Ví dụ drift trong 3 tháng tới:** `REFUND-v4` có hiệu lực từ 01/12/2026 và hạ `auto_limit_vnd` từ 200.000 xuống 100.000 đồng. Cùng một đề xuất hoàn 150.000 đồng, quyết định tự động hay chuyển duyệt có thể đổi theo phiên bản. Đây là thay đổi quan hệ đầu vào–đầu ra. Theo dõi tỷ lệ chọn sai phiên bản ở A2 và đối chiếu `pass_rate` trên các ca sát hạn mức.
 
 **Ví dụ một dòng (đừng chép):** trường then chốt `parcels[].delivered_date` · bản ghi do máy quét ở điểm phát tạo ra, là nguồn
 sự thật về ngày giao · lệch khi điểm phát quét sót hoặc nhập bù bằng tay.
@@ -252,7 +248,7 @@ Bốn lăng kính (bắt buộc đủ cả bốn; dự án AI hay chết ở ba 
 | Lý do thất bại (viết ở thì quá khứ) | Lăng kính | Kiểm được hôm nay? (trace / data / config nào) | Thành cổng phòng ngừa nào (code hay config) / hay vào risk register |
 |---|---|---|---|
 | | Kỹ thuật | | |
-| | Kinh doanh | | |
+| | Kinh doanh | Ca chuyển duyệt tăng làm phát sinh 10.000 đồng công/ca, chưa kể chi phí trợ lý và phí giữ chỗ. Kho có nhiều ca ngoại lệ có thể tốn hơn làm tay. | Đối chiếu chi phí/ticket, ROI và tải duyệt theo kho; nếu tập trung ở một kho thì đo thử phạm vi còn lại trước khi đề xuất thu hẹp. |
 | | Con người và vận hành | | |
 | | Pháp lý | | |
 | | | | |
@@ -308,10 +304,10 @@ Mỗi con số kèm một câu lý do, lấy từ `data/world.json` → `ops_lim
 
 | Khoá | Giá trị bàn đặt | Lý do (một câu, có số) |
 |---|---|---|
-| `business.daily_refund_cap_vnd` | | |
-| `business.cost_budget_per_ticket_vnd` | | |
-| `business.pilot_scope` (all / warehouse / percent) | | |
-| `business.roi_min` | | |
+| `business.daily_refund_cap_vnd` | Chờ nhóm chốt | Trần Finance là 2.000.000 đồng hoàn tự động/ngày; nếu pilot cần biên an toàn thì chọn mức thấp hơn. |
+| `business.cost_budget_per_ticket_vnd` | Chờ nhóm chốt | Mốc so sánh là 10.000 đồng/ticket làm tay; chi phí LLM có trần riêng 1.500 đồng/ticket. |
+| `business.pilot_scope` (all / warehouse / percent) | Chờ nhóm chốt | Đối chiếu lưu lượng giờ cao điểm với 6 ca duyệt/người/giờ và SLA 60 phút để chọn độ phủ. |
+| `business.roi_min` | Chờ nhóm chốt | ROI 0 là hòa vốn; mỗi người trực thêm có phí 30.000 đồng/ca, nên cần tính cả chi phí này khi chốt biên. |
 
 ### B7.5 · Câu 2.10 · Cổng con người, vận hành, pháp lý + Runbook phần 1–3
 

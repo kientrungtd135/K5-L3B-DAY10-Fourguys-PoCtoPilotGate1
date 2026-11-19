@@ -68,15 +68,15 @@ Sản phẩm và kinh doanh; phụ trách `config/acceptance_criteria.json`, m�
 
 ### Đóng góp cụ thể
 
-Điền sau khi hoàn thành.
+Soạn mục tiêu cấp hệ thống, câu tiêu chí đề xuất, bản đồ dữ liệu và ví dụ thay đổi chính sách; đối chiếu các mốc chi phí và trần hoàn tiền để chuẩn bị quyết định Gate 1. Có dùng AI để đọc repo, hỗ trợ soạn phiếu và chuẩn bị demo.
 
 ### Bằng chứng
 
-Điền mã commit, mã lần chạy (`runs/<mã>`) và mục phiếu sau khi hoàn thành.
+A1/A4 của Phiếu A; B3, lăng kính kinh doanh B6 và cơ sở chọn số B7.4 của Phiếu B; `demo-tv3.md`. Mã lần chạy sẽ bổ sung vào B8 và C12 khi có báo cáo.
 
 ### Exit ticket
 
-Điền sau buổi lab.
+Gợi ý để TV3 tự xác nhận sau lab: chi phí thấp mỗi lần gọi mô hình chưa bảo đảm pilot tiết kiệm; cần kiểm tra thêm chi phí chuyển duyệt giờ cao điểm và mức độ các số mô phỏng phản ánh tải thật.
 
 ## LuuNguyenChiDuc-2A202603923
 

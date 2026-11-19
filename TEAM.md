@@ -80,7 +80,7 @@ Soạn mục tiêu cấp hệ thống, ngưỡng và quy tắc quyết định G
 
 ### Bằng chứng
 
-A1/A4 của Phiếu A; B3, B6 kinh doanh, B7.4/B8 của Phiếu B; C3.3/C5/C12 của Phiếu C; `demo-tv3.md`. V1 dựa trên `R-base-prepared-20261119-161437-fe1b1b`, v2 dựa trên `R-S7-grade-20261119-170259-5993e2`.
+A1/A4 của Phiếu A; B3, B6 kinh doanh, B7.4/B8 của Phiếu B; C3.3/C5/C12 của Phiếu C; `demo-tv3.md`. V1 dựa trên `R-base-prepared-20261119-161437-fe1b1b`, v2 dựa trên `R-S7-grade-20261119-170412-498db4`.
 
 ### Exit ticket
 

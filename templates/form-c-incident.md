@@ -455,13 +455,13 @@ Cột v1 nằm ở Phiếu B mục B8; không sửa cột đó.
 |---|---|
 | Commit ký tiêu chí | `19a1d0b`, giống v1. |
 | Hash chốt cổng vòng 1 | `bfb563a4`, giống v1. |
-| Mã lần chạy dùng làm bằng chứng | S7 `base`: `R-S7-before-20261119-170259-5993e2` · `prepared`: `R-S7-prepared-20261119-170259-5993e2` · `after`: `R-S7-after-20261119-170259-5993e2`. |
+| Mã lần chạy dùng làm bằng chứng | S7 `base`: `R-S7-before-20261119-170412-498db4` · `prepared`: `R-S7-prepared-20261119-170412-498db4` · `after`: `R-S7-after-20261119-170412-498db4`. |
 | Còn dòng "vượt trần" nào trong report? (hàng chờ, chi phí, ROI, trần tiền, pháp lý) | Báo cáo `after` không còn vượt trần trên S7 và bộ nền. |
 | Kho hoặc hãng có số xấu nhất. Nếu chỉ nhìn phân khúc này, quyết định có đổi không? | VNX có 15 lần lộ PII ở `base`, còn 0 ở `prepared` và `after` trong phạm vi đã đo. HN có chi phí cao nhất trong hai kho S7 được giữ ở `after` (2.102 đồng/ticket ở bảng theo kho, chưa phân bổ chi phí dùng chung), đạt 100% và có 0 lần lộ. Giữ quyết định khi xét các phân khúc này ở `after`. |
 | Quyết định | **Tiếp tục** trong HN/HCM, giữ một người trực; 2/8 ticket S7 ngoài phạm vi tiếp tục xử lý thủ công. |
-| Bằng chứng 1: mã lần chạy + chỉ số bắt buộc nào đạt / chưa | Ba mốc của `R-S7-grade-20261119-170259-5993e2`: PII **30 → 0 → 0**, hoàn sai và lỗi hãng oan đều 0 trên S7. |
-| Bằng chứng 2 | `R-S7-after-20261119-170259-5993e2`: `pass_rate` và `pass^k` đều 100%, so với 94% và 85%. Độ phủ S7 75%; báo cáo cũng xác nhận không có ca hồi quy mới trên bộ nền. |
-| Bằng chứng 3 | `R-S7-after-20261119-170259-5993e2`: 6.434 đồng/ticket ≤ 9.000 đồng, ROI 55% ≥ 10%, 0 ca ùn; hoàn tự động 25.000 đồng/ngày dưới trần 1,8 triệu. |
+| Bằng chứng 1: mã lần chạy + chỉ số bắt buộc nào đạt / chưa | Ba mốc của `R-S7-grade-20261119-170412-498db4`: PII **30 → 0 → 0**, hoàn sai và lỗi hãng oan đều 0 trên S7. |
+| Bằng chứng 2 | `R-S7-after-20261119-170412-498db4`: `pass_rate` và `pass^k` đều 100%, so với 94% và 85%. Độ phủ S7 75%; báo cáo cũng xác nhận không có ca hồi quy mới trên bộ nền. |
+| Bằng chứng 3 | `R-S7-after-20261119-170412-498db4`: 6.434 đồng/ticket ≤ 9.000 đồng, ROI 55% ≥ 10%, 0 ca ùn; hoàn tự động 25.000 đồng/ngày dưới trần 1,8 triệu. |
 | Khớp dòng nào trong `decision_rule` đã ký? | **Tiếp tục**: đạt các ngưỡng bắt buộc và kinh doanh/vận hành, không vượt trần, có độ phủ dương. |
 | Nếu Thu hẹp / Cải tiến thêm / Dừng | Không áp dụng cho quyết định này. |
 | Ngày quyết định lại (trừ khi Dừng) | 30/11/2026, trước khi `REFUND-v4` có hiệu lực. Xem lại sớm nếu điều kiện dừng kích hoạt. |
@@ -469,7 +469,7 @@ Cột v1 nằm ở Phiếu B mục B8; không sửa cột đó.
 
 **Chỉ ở v2**
 - Giữ **Tiếp tục** so với v1 vì `after` giữ 0 lần lộ PII trên S7, ROI 55% và không có ca ùn. Vòng 2 thêm giám sát: tỷ lệ ticket có dấu hiệu liên hệ trong văn bản là 50% trên S7 `after` so với 0% trên bộ nền, còn tỷ lệ payload hãng có dấu hiệu liên hệ là 0% trên S7 `after`.
-- `R-S7-grade-20261119-170259-5993e2` đạt `PASS-VISIBLE`. Không có mục đỏ trong các kiểm tra đã chạy; máy chưa có test ẩn.
+- `R-S7-grade-20261119-170412-498db4` đạt `PASS-VISIBLE`. Không có mục đỏ trong các kiểm tra đã chạy; máy chưa có test ẩn.
 - Cổng vòng 1 đã loại trường dư trong thông báo hãng trên các ca S7 được xử lý, đưa chỉ số PII từ 30 xuống 0. Phép đo còn giới hạn ở phạm vi pilot và chưa thử dữ liệu cá nhân bị gán nhầm vào giá trị của một trường được phép.
 - Report ghi “Được phép cân nhắc ‘Tiếp tục’”, phù hợp với v2 trong phạm vi đã đo.
 - Bộ thử chưa xác nhận mọi hệ thống hãng nhận đúng bốn trường sau các bước chuyển tiếp. Trong pilot, cần đối soát mẫu payload ở đầu gửi và đầu nhận trước khi mở rộng.

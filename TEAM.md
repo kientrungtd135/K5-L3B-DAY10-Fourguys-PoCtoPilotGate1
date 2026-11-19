@@ -46,19 +46,27 @@ Commit `19a1d0b`, `23e38d3`, `0217571`, `8dd64dc`, `8917325`, `8d1c19d`; checkpo
 
 ### Phần việc phụ trách
 
-Kỹ sư cổng (trace, test, chỉ số theo dõi); phụ trách `lab10/monitors.py` và các mục được giao trong phiếu A/B/C.
+Kỹ sư cổng (trace, test, chỉ số theo dõi); phụ trách `lab10/monitors.py`. Phiếu A: câu 1.5 (A3) và bốn câu soát (A4 bước 2). Phiếu B: câu 2.2 (B2), 2.7 (B7.2), 2.8 (B7.3). Phiếu C: câu 3.1 (C2), 3.4 (C6), 3.6 (C8), 3.7 (C9).
 
 ### Đóng góp cụ thể
 
-Điền sau khi hoàn thành.
+Vòng 1: trace `T-002@55` và tìm hai lỗi chìm. Lỗi thứ nhất là trợ lý tin số 5 ngày khách khai thay vì 2 ngày trong tracking, nên hoàn sai 20.000đ và ghi lỗi oan cho VNX. Lỗi thứ hai là tin gửi hãng kèm nguyên văn lời khách (`customer_note`). Viết hai bước tránh chỉnh cổng trên chính bộ dùng để chấm (B7.2). Viết một tính chất và hai ticket hiểm (B7.3) trên `O-1011/C-11` và `O-1010/C-10`; trước cổng cả hai đều làm vỡ tính chất (hoàn 39.000đ ở seed 55, hoàn 475.000đ trừ vào shop), sau cổng vòng 1 cả 5 seed đều đúng.
+
+Trong `lab10/monitors.py`, thêm 8 chỉ số theo dõi chỉ đọc trace, sổ cái và tin gửi đi, không dùng nhãn hay mã ticket: `db_override_rate`, `directive_obeyed_rate`, `fault_without_evidence_rate`, `carrier_payload_extra_fields_rate`, `duplicate_refund_rate`, `fail_open_rate`, `customer_text_contact_rate`, `carrier_payload_contact_rate`.
+
+Thẻ S7: trace `S7-01@11`, `S7-20@11`, `S7-04@11` ở mốc base và đối chứng với `S7-05@11`, điền bảng soát lỗi với ba lỗi chìm có nguồn khác nhau (C2), vẽ fault tree trước khi sửa với ba nhánh ở tầng hành động, data và vận hành (C6). Sau khi có kết quả vòng 2, viết C8 cho `customer_text_contact_rate` (bộ nền 0, S7 after 0,5, nên vẫn báo khi cổng đã chặn) và vẽ fault tree sau khi sửa (C9), ghi rõ nhánh [4] còn hở: giá trị trong trường được phép chưa được xác minh nguồn.
+
+Phát hiện máy ký tiêu chí và chốt vòng 1 bật `core.autocrlf`, nên hash trong lock tính trên bản CRLF; clone về máy khác sẽ báo tiêu chí bị sửa. Thêm `.gitattributes` để mọi máy checkout đúng byte đã ký mà không đổi blob của commit ký, kiểm lại bằng clone mới từ GitHub với cả hai cấu hình.
+
+Có dùng AI (Claude Code) để đọc code, chạy trace và eval, soạn nháp các ô phiếu và code chỉ số theo dõi. Mình đã đọc lại trace, đối chiếu từng con số với report trước khi commit.
 
 ### Bằng chứng
 
-Điền mã commit, mã lần chạy (`runs/<mã>`) và mục phiếu sau khi hoàn thành.
+Commit `40d4ec6` (Phiếu A), `f4dc1e1`, `329fac7`, `d6bf0d6` (Phiếu B và `monitors.py`), `878cdb8` (C2, C6), `1641ca6` (C8, C9, C0 dòng 5–6), `3f0c948`, `b47206b` (`.gitattributes`). Lần chạy trên máy mình: `R-base-before-20261119-154024-4d2299` (B2), `R-S7-before-20261119-164336-fe1b1b`, `R-S7-after-20261119-170009-498db4`, `R-base-after-20261119-170010-498db4`, `R-S7-grade-20261119-170010-498db4`; P1 chạy lại ra cùng số ở `R-S7-after-20261119-170348-498db4`. Dòng trong phiếu: Phiếu A A3, A4 bước 2; Phiếu B B2, B7.2, B7.3; Phiếu C C2, C6, C8, C9.
 
 ### Exit ticket
 
-Điền sau buổi lab.
+Điều học được: một cổng lọc theo danh sách trường được phép thì ngăn được cả loại lộ dữ liệu mà bộ dò mẫu số điện thoại bỏ sót (như `S7-04` chỉ có địa chỉ), còn chỉ số theo dõi cần đo ở chỗ vẫn khác nhau sau khi cổng đã chặn thì mới báo được khi sự cố quay lại. Còn chưa chắc: làm sao xác minh nguồn của từng giá trị trong tin gửi hãng, và mẫu dò dữ liệu liên hệ sẽ bỏ sót bao nhiêu khi khách viết số bằng chữ hoặc dùng email.
 
 ## TrinhHungThinh-2A202603907
 
